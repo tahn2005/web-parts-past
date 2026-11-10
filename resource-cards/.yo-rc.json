@@ -1,0 +1,22 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "whichFolder": "subdir",
+    "solutionName": "manager-hub-webparts",
+    "solutionShortDescription": "Resource Cards web part for SharePoint",
+    "environment": "spo",
+    "packageManager": "npm",
+    "skipFeatureDeployment": true,
+    "useGulp": false,
+    "componentType": "webpart",
+    "template": "react",
+    "componentName": "ResourceCards",
+    "componentDescription": "Customizable resource cards",
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.22.0",
+    "sdksVersions": {},
+    "version": "1.24.0",
+    "libraryName": "manager-hub-webparts",
+    "libraryId": "547f614f-66fc-47fe-85e4-c698041436d7"
+  }
+}

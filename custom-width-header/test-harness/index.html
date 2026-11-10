@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>SharePoint host stand-in</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* Hostile "SharePoint-like" globals, to prove the web part's styles are self-contained. */
+  html { font-size: 14px; }
+  body { margin: 0; font-family: "Segoe UI", sans-serif; color: #323130; background: #fff; line-height: 1.2; }
+  h1 { font-size: 40px; font-weight: 300; margin: 24px 0; color: #0078d4; font-family: Arial; }
+  h2 { font-size: 28px; font-weight: 300; margin: 20px 0; color: #0078d4; }
+  p { margin: 10px 0; font-size: 18px; color: #323130; }
+  a, a:visited { color: #0078d4; text-decoration: underline; }
+  .layout { display: flex; }
+  .canvas { flex: 1; min-width: 0; }
+  .fullwidth { width: 100%; }            /* SharePoint full-width section: edge to edge */
+  .column { max-width: 1204px; margin: 24px auto; padding: 0 32px; }  /* normal one-column section */
+  #pane { width: 320px; border-left: 1px solid #ccc; padding: 12px; font-size: 13px; }
+  #pane .field { margin: 6px 0; }
+  #pane .error { color: #a4262c; }
+</style></head>
+<body><div class="layout"><main class="canvas" id="canvas">
+<section class="fullwidth"><div id="wp1"></div></section>
+<section class="column"><p>Page content below the header.</p><div id="wp2"></div></section>
+</main><aside id="pane" aria-label="Property pane"></aside></div>
+<script src="vendor.js"></script>
+<script>window.__MODULE_ID='121dcf48-85b3-4120-9d1e-7a019d67bdeb_0.0.1'</script>
+<script src="host.js"></script>
+<script>window.__defineName='CustomWidthHeaderWebPartStrings'</script>
+<script src="/dist/CustomWidthHeaderWebPartStrings_en-us_8b388de470584c79866573d3ffca447d.js"></script>
+<script>window.__defineName='PropertyControlStrings'</script>
+<script src="/pnploc/en-us.js"></script>
+<script>window.__defineName=null</script>
+<script src="/dist/custom-width-header-web-part_b7385566e6c23dc612df.js"></script>
+</body></html>

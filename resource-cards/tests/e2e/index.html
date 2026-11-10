@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SPFx host simulator</title>
+<style>
+  body{margin:0;font-family:'Segoe UI',sans-serif;background:#fff;color:#323130}
+  #layout{display:flex;gap:16px;align-items:flex-start}
+  #canvas{flex:1;min-width:0;padding:16px}
+  #pane{width:320px;flex-shrink:0;border-left:1px solid #ddd;padding:12px;display:none}
+  #pane.open{display:block}
+  #pane .field{margin:0 0 12px} #pane label{display:block;font-weight:600;font-size:14px}
+  #pane input[type=text],#pane textarea,#pane select{width:100%;box-sizing:border-box}
+  #pane .err{color:#a4262c;font-size:12px}
+  /* SharePoint draws choice groups with Fluent UI (24px+ targets); match that
+     so accessibility scans test the web part, not this stand-in. */
+  #pane input[type=radio]:not([class]){width:24px;height:24px;margin:0 6px 0 0;vertical-align:middle}
+  /* stand-in for SharePoint's own heading styles, to prove they don't leak in */
+  h2,h3,h4{font-family:Georgia,serif;margin:40px 0;color:red;font-size:30px}
+  p{margin:30px 0;font-size:20px} a{color:green;text-decoration:underline}
+</style>
+</head>
+<body>
+<div id="layout"><main id="canvas"><div id="section"><div id="wp"></div></div></main><aside id="pane" aria-label="Property pane"></aside></div>
+<script src="host.js"></script>
+</body>
+</html>

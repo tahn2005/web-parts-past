@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Custom Width Header",
+    "id": "a9db1d40-94f9-4cb4-b3e5-c6f8271e3100",
+    "version": "1.0.2.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.23.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Custom Width Header: a page header for full-width or regular sections."
+      },
+      "longDescription": {
+        "default": "Custom Width Header adds a page header with a back link, label, icon or image, title and description on a color or image background. It fits full-width sections edge to edge and keeps text readable over any image."
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "Custom Width Header",
+        "description": "Activates the Custom Width Header web part.",
+        "id": "042ca162-b9ce-4bcb-91a9-497ad9170f17",
+        "version": "1.0.2.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/manager-hub-page-header.sppkg"
+  }
+}

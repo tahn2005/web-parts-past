@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "manager-hub-webparts-client-side-solution",
+    "id": "a676f1a9-f856-4c3b-a8d7-f0d53e6f32f3",
+    "version": "1.0.4.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.23.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Manager Hub web parts for SharePoint pages."
+      },
+      "longDescription": {
+        "default": "Individual Manager Hub components as configurable SharePoint web parts, starting with the Resource Accordion: a collapsible section of resource cards."
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "Manager Hub web parts",
+        "description": "Activates the Manager Hub web parts.",
+        "id": "bf03090c-f1c1-4238-b349-4d12f39cd67a",
+        "version": "1.0.4.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/accordion-cards.sppkg"
+  }
+}

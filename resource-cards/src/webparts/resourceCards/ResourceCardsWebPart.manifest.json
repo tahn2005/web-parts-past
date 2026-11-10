@@ -1,0 +1,79 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "0367aac9-0061-48ba-b8b4-bf749c03f072",
+  "alias": "ResourceCardsWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart",
+    "SharePointFullPage"
+  ],
+  "supportsThemeVariants": true,
+  "supportsFullBleed": false,
+  "preconfiguredEntries": [
+    {
+      "groupId": "6d7b1f3a-2c55-4c3e-9f0e-3e1f5a8b9c21",
+      "group": {
+        "default": "Resource Cards"
+      },
+      "title": {
+        "default": "Resource Cards"
+      },
+      "description": {
+        "default": "A grid of resource cards. Add, remove and reorder cards, and choose each card's icon or image, text, link and accent colour."
+      },
+      "officeFabricIconFontName": "GridViewSmall",
+      "properties": {
+        "accentColor": "#2563eb",
+        "useInterFont": true,
+        "headingLevel": 3,
+        "cards": [
+          {
+            "id": "card-recruiting-process",
+            "mediaType": "icon",
+            "icon": "Workflow",
+            "imageUrl": "",
+            "imageAlt": "",
+            "imageSize": "small",
+            "title": "Recruiting Process",
+            "description": "Learn the hiring process and manager responsibilities from requisition to hire.",
+            "linkText": "View Resource",
+            "url": "",
+            "openInNewTab": false,
+            "accentColor": ""
+          },
+          {
+            "id": "card-greenhouse",
+            "mediaType": "icon",
+            "icon": "Monitor",
+            "imageUrl": "",
+            "imageAlt": "",
+            "imageSize": "small",
+            "title": "Greenhouse - Our ATS",
+            "description": "Use Greenhouse to manage candidates, interviews, and hiring activities.",
+            "linkText": "View Resource",
+            "url": "",
+            "openInNewTab": false,
+            "accentColor": ""
+          },
+          {
+            "id": "card-interviewing",
+            "mediaType": "icon",
+            "icon": "MessagesSquare",
+            "imageUrl": "",
+            "imageAlt": "",
+            "imageSize": "small",
+            "title": "Interviewing",
+            "description": "Conduct effective, compliant, and consistent candidate interviews.",
+            "linkText": "View Resource",
+            "url": "",
+            "openInNewTab": false,
+            "accentColor": ""
+          }
+        ]
+      }
+    }
+  ]
+}

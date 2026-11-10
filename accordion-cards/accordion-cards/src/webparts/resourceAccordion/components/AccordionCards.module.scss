@@ -1,0 +1,455 @@
+// Accordion Cards — a port of the accordion section + resource cards in
+// LifecyclePageTemplate.tsx / ResourceCard.tsx. Sizes are the app's Tailwind
+// values converted to px (the app's root font size is 16px), so the web part
+// renders identically regardless of SharePoint's own root font size.
+//
+// Colours arrive as CSS custom properties set inline by the component (see
+// theme.ts), which is what lets every colour be author-configurable while
+// hover and focus states stay in CSS.
+
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$hairline: rgba(26, 52, 97, 0.08);
+
+.root {
+  font-family: var(--ra-font);
+  color: var(--ra-title);
+  text-align: left;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+}
+
+.section {
+  background-color: var(--ra-body-bg);
+  border: 1px solid rgba(26, 52, 97, 0.1);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+// Heading wrapper: neutralise SharePoint's heading styles so only the button's
+// own typography shows.
+.heading {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  letter-spacing: normal;
+}
+
+.trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding: 16px 20px;
+  border: 0;
+  border-bottom: 1px solid $hairline;
+  border-radius: 0;
+  background-color: var(--ra-header-bg);
+  color: inherit;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 150ms $ease;
+
+  &:hover {
+    background-color: var(--ra-header-hover-bg);
+  }
+
+  // Inset, because the section clips anything drawn outside it.
+  &:focus-visible {
+    outline: 2px solid var(--ra-focus);
+    outline-offset: -4px;
+  }
+}
+
+.triggerMain {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.headerIcon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: var(--ra-tint);
+  color: var(--ra-accent);
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.headerText {
+  display: block;
+  min-width: 0;
+  text-align: left;
+}
+
+.title {
+  display: block;
+  font-size: 15.2px;
+  font-weight: 600;
+  color: var(--ra-title);
+  overflow-wrap: anywhere;
+}
+
+.description {
+  display: block;
+  font-size: 12.8px;
+  color: var(--ra-description);
+  overflow-wrap: anywhere;
+}
+
+.badge {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border: 1px solid var(--ra-border);
+  border-radius: 9999px;
+  background-color: var(--ra-tint);
+  color: var(--ra-badge-text);
+  font-size: 11.52px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.chevron {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--ra-chevron);
+  // Points right when collapsed, down when expanded — as in the app.
+  transform: rotate(-90deg);
+  transition: transform 200ms $ease;
+}
+
+.expanded .chevron {
+  transform: rotate(0deg);
+}
+
+.panel {
+  overflow: hidden;
+
+  &[hidden] {
+    display: none !important;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin: 0;
+  padding: 16px;
+  list-style: none;
+}
+
+.cols2 .grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cols3 .grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gridItem {
+  display: flex;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.empty {
+  margin: 0;
+  padding: 16px 20px;
+  color: var(--ra-empty);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+// Card ---------------------------------------------------------------------
+
+.card {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid $hairline;
+  border-radius: 10px;
+  background-color: var(--rc-bg);
+  transition:
+    border-color 150ms $ease,
+    background-color 150ms $ease,
+    transform 150ms $ease,
+    box-shadow 150ms $ease;
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--rc-border);
+    background-color: var(--rc-tint);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+}
+
+.cardIconRow {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.cardIcon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--rc-tint);
+  color: var(--rc-accent);
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.iconImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cardTitle {
+  margin: 0 0 6px;
+  padding: 0;
+  color: var(--rc-title);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: normal;
+  overflow-wrap: anywhere;
+}
+
+.cardDescription {
+  flex: 1;
+  margin: 0 0 12px;
+  padding: 0;
+  color: var(--rc-description);
+  font-size: 12.48px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+// Doubled class beats SharePoint's global link colours.
+.card .cardLink,
+.card .cardLink:visited {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 4px;
+  margin-top: auto;
+  border-radius: 4px;
+  color: var(--rc-link);
+  font-size: 12.48px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none;
+
+  svg {
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.card .cardLink:hover {
+  color: var(--rc-link);
+  text-decoration: underline;
+}
+
+.card .cardLink:focus-visible {
+  outline: 2px solid var(--rc-focus);
+  outline-offset: 2px;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+// Edit mode ----------------------------------------------------------------
+
+.editing .card {
+  cursor: pointer;
+}
+
+.selected,
+.selected:hover,
+.selected:focus-within {
+  border-color: var(--rc-focus);
+  box-shadow: 0 0 0 1px var(--rc-focus);
+}
+
+.placeholder {
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.noLink {
+  margin-top: auto;
+  color: #5a6a8a;
+  font-size: 12.48px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.cardTools {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid rgba(26, 52, 97, 0.18);
+  border-radius: 6px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.toolButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #374151;
+  cursor: pointer;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #eef1f8;
+    color: #0f1c36;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #1d4ed8;
+    outline-offset: 0;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+
+.addTile {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 150px;
+  margin: 0;
+  padding: 16px;
+  border: 1.5px dashed #5a6a8a;
+  border-radius: 10px;
+  background: transparent;
+  color: #1a3461;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: background-color 150ms $ease;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background-color: #f4f6fb;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #1d4ed8;
+    outline-offset: 2px;
+  }
+}
+
+// Preferences --------------------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  .trigger,
+  .chevron,
+  .card,
+  .addTile {
+    transition: none;
+  }
+
+  .card:hover,
+  .card:focus-within {
+    transform: none;
+  }
+}
+
+// Windows High Contrast / forced colours: keep every boundary and focus ring visible.
+@media (forced-colors: active) {
+  .section,
+  .card,
+  .badge,
+  .cardTools {
+    border-color: CanvasText;
+  }
+
+  .trigger:focus-visible,
+  .card .cardLink:focus-visible,
+  .toolButton:focus-visible,
+  .addTile:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .selected {
+    outline: 2px solid Highlight;
+  }
+}

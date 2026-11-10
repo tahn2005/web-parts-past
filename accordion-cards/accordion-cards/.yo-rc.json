@@ -1,0 +1,20 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.14.0",
+    "sdksVersions": {},
+    "version": "1.23.2",
+    "libraryName": "manager-hub-webparts",
+    "libraryId": "a676f1a9-f856-4c3b-a8d7-f0d53e6f32f3",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "manager-hub-webparts",
+    "solutionShortDescription": "Manager Hub web parts for SharePoint pages.",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart",
+    "template": "react",
+    "useGulp": true
+  }
+}

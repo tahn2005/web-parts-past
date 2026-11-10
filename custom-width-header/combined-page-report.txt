@@ -1,0 +1,34 @@
+PASS  article page: whole page passes axe (incl. heading-order, one H1, unique ids, landmarks)
+PASS  article page: nothing left for manual contrast review
+PASS  article page: heading outline h1 h2 h2 h2 h3 h3 h3 h2 h3 h3 h3 has no skips or extra H1
+PASS  article page: header became H2 under the page title
+PASS  article page: no errors
+PASS  home page: whole page passes axe (incl. heading-order, one H1, unique ids, landmarks)
+PASS  home page: nothing left for manual contrast review
+PASS  home page: heading outline h1 h2 h3 h3 h3 h2 h3 h3 h3 has no skips or extra H1
+PASS  home page: header is the H1
+PASS  home page: no errors
+PASS  photo header (panel) + nested accordion: whole page passes axe (incl. heading-order, one H1, unique ids, landmarks)
+PASS  photo header (panel) + nested accordion: nothing left for manual contrast review
+PASS  photo header (panel) + nested accordion: heading outline h1 h2 h2 h3 h4 h4 h4 has no skips or extra H1
+PASS  photo header: no errors
+PASS  photo header (tint): whole page passes axe (incl. heading-order, one H1, unique ids, landmarks)
+PASS  photo header (tint): heading outline h1 h2 h2 h3 h3 h3 has no skips or extra H1
+PASS  photo header (tint): no errors
+PASS  edit mode: whole page passes axe (incl. heading-order, one H1, unique ids, landmarks)
+PASS  edit mode: nothing left for manual contrast review
+PASS  edit mode: heading outline h1 h2 h2 h3 h3 h3 h2 h3 h3 h3 has no skips or extra H1
+PASS  edit mode: no errors
+PASS  four palettes: headers, accordions and link cards: whole page passes axe (incl. heading-order, one H1, unique ids, landmarks)
+PASS  four palettes: headers, accordions and link cards: nothing left for manual contrast review
+PASS  four palettes: headers, accordions and link cards: heading outline h1 h2 h2 h3 h3 h3 h2 h2 h3 h3 h3 h2 h2 h3 h3 h3 h2 h2 h3 h3 h3 has no skips or extra H1
+PASS  many web parts: every id on the page is unique
+PASS  four palettes: no errors
+PASS  phone: no horizontal scrolling with both web parts (WCAG 1.4.10)
+PASS  phone: whole page passes axe (incl. heading-order, one H1, unique ids, landmarks)
+PASS  phone: nothing left for manual contrast review
+PASS  phone: heading outline h1 h2 h2 h3 h3 h3 has no skips or extra H1
+PASS  phone: no errors
+PASS  control: a forced H1 + an H4 accordion is reported (duplicate H1 and skipped levels)
+
+32/32 checks passed

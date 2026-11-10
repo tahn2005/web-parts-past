@@ -1,0 +1,130 @@
+PASS  package: tenant-wide deployment (SkipFeatureDeployment)
+PASS  package: SharePoint pages only
+PASS  package: allowed in full-width sections (supportsFullBleed)
+PASS  package: all assets inside the package
+PASS  package: shows as "Custom Width Header" (app, feature and toolbox)
+PASS  package: version 1.0.2.0 with the same IDs, so deployed copies update in place
+PASS  naming: package file keeps its original name (manager-hub-page-header.sppkg) so it overwrites the deployed one
+PASS  naming: no old names anywhere inside the package
+PASS  naming: every bundled file is named after the web part (no numbered chunks)
+PASS  package: heading level defaults to Automatic
+PASS  package: separate solution from the accordion
+PASS  drop-in: title is an h1
+PASS  drop-in: back link defaults to the site home page
+PASS  drop-in: icon tile shown and decorative
+PASS  drop-in: description shown
+PASS  drop-in: back link does not navigate while editing
+PASS  drop-in: no pane code for readers/authors until the pane opens
+PASS  axe: default header (edit mode)
+PASS  axe: default header (edit mode) — every contrast measurable (nothing left "needs review")
+PASS  drop-in: rendered contrast passes for every text element
+PASS  drop-in: no console errors, no unknown SharePoint APIs
+PASS  page layout: app sizes (28px Merriweather title, 48px tile, 1280px content, 600px description)
+PASS  content layout: app sizes (25.6px title, uppercase label, 880px content)
+PASS  axe: content layout with label
+PASS  axe: content layout with label — every contrast measurable (nothing left "needs review")
+PASS  full width: background spans edge to edge
+PASS  full width: content centred at the app's 1280px
+PASS  normal section: fits its column
+PASS  reflow: no horizontal scrolling at 320px (WCAG 1.4.10)
+PASS  reflow: no horizontal scrolling at 768px (WCAG 1.4.10)
+PASS  text over image (overlay, author set 0%) on white: every word ≥ AA on the worst pixel
+PASS  text over image (overlay, author set 55%) on white: every word ≥ AA on the worst pixel
+PASS  text over image (overlay, author set 0%) on black: every word ≥ AA on the worst pixel
+PASS  text over image (overlay, author set 55%) on black: every word ≥ AA on the worst pixel
+PASS  text over image (overlay, author set 0%) on checker: every word ≥ AA on the worst pixel
+PASS  axe: text over image (overlay, author set 0%) on checker
+      note: axe leaves 4 text node(s) as "needs review" over the photo — measured above instead
+PASS  text over image (overlay, author set 55%) on checker: every word ≥ AA on the worst pixel
+PASS  axe: text over image (overlay, author set 55%) on checker
+      note: axe leaves 4 text node(s) as "needs review" over the photo — measured above instead
+PASS  text over image (overlay, author set 0%) on noise: every word ≥ AA on the worst pixel
+PASS  text over image (overlay, author set 55%) on noise: every word ≥ AA on the worst pixel
+PASS  text over image (overlay, author set 0%) on yellow: every word ≥ AA on the worst pixel
+PASS  text over image (overlay, author set 55%) on yellow: every word ≥ AA on the worst pixel
+PASS  text over image (panel) on white: every word ≥ AA on the worst pixel
+PASS  text over image (panel) on black: every word ≥ AA on the worst pixel
+PASS  text over image (panel) on checker: every word ≥ AA on the worst pixel
+PASS  axe: text over image (panel) on checker
+PASS  axe: text over image (panel) on checker — every contrast measurable (nothing left "needs review")
+PASS  text over image (panel) on noise: every word ≥ AA on the worst pixel
+PASS  text over image (panel) on yellow: every word ≥ AA on the worst pixel
+PASS  white tint + white text on a white photo is still made readable
+PASS  blue gradient: rendered contrast passes
+PASS  axe: blue gradient
+PASS  blue solid: rendered contrast passes
+PASS  axe: blue solid
+PASS  axe: blue solid — every contrast measurable (nothing left "needs review")
+PASS  indigo gradient: rendered contrast passes
+PASS  axe: indigo gradient
+PASS  indigo solid: rendered contrast passes
+PASS  axe: indigo solid
+PASS  axe: indigo solid — every contrast measurable (nothing left "needs review")
+PASS  green gradient: rendered contrast passes
+PASS  axe: green gradient
+PASS  green solid: rendered contrast passes
+PASS  axe: green solid
+PASS  axe: green solid — every contrast measurable (nothing left "needs review")
+PASS  amber gradient: rendered contrast passes
+PASS  axe: amber gradient
+PASS  amber solid: rendered contrast passes
+PASS  axe: amber solid
+PASS  axe: amber solid — every contrast measurable (nothing left "needs review")
+PASS  pane: opens and lazy-loads its code
+PASS  pane: text fields update the header
+PASS  pane: unsafe back link address rejected
+PASS  pane: custom back link text and address
+PASS  pane: back link can be hidden (and its fields hide)
+PASS  pane: icon picker sets the icon
+PASS  pane: icon can be turned off
+PASS  pane: icon image from a picker
+PASS  pane: custom colour starts from the previous palette
+PASS  pane: a light custom colour is corrected and explained
+PASS  pane: gradient can be switched off
+PASS  pane: image mode shows picker, position, text style, tint and strength
+PASS  pane: edit mode prompts for an image
+PASS  upload: saved to Site Assets/CustomWidthHeader with a unique, safe name
+PASS  upload: background image renders, decorative
+PASS  upload: non-images refused before upload
+PASS  pane: a weak tint is raised for contrast and explained
+PASS  pane: image focus position
+PASS  pane: panel mode swaps tint controls for a panel colour
+PASS  pane: layout, height and heading level
+PASS  pane: fonts can fall back to SharePoint's
+PASS  persistence: no helper values saved
+PASS  pane: no errors and no unknown SharePoint APIs
+PASS  round trip: saved header renders as authored
+PASS  round trip: no edit prompts for readers
+PASS  round trip: rendered contrast passes
+PASS  axe: saved header, image + panel
+PASS  axe: saved header, image + panel — every contrast measurable (nothing left "needs review")
+PASS  round trip: no console errors
+PASS  heading: no page title above -> the header is the H1
+PASS  heading: SharePoint page title above -> the header is H2
+PASS  heading: ARIA level-1 title above -> H2
+PASS  heading: hidden or aria-hidden titles are ignored -> H1
+PASS  heading: a title area drawn after the header is picked up (re-check)
+PASS  heading: a manual H1 is respected
+PASS  heading: pane warns when a manual level does not fit the page
+PASS  heading: pane offers Automatic
+PASS  heading: choosing Automatic fixes it and the warning goes
+PASS  upgrade: headers saved by 1.0 with the H1 default move to Automatic; deliberate choices kept
+PASS  keyboard: back link is reachable with a visible focus ring
+PASS  reduced motion: no transitions
+PASS  high contrast: background photo dropped so text uses system colours
+PASS  axe: forced colors
+PASS  isolation: SharePoint-style globals do not leak in
+PASS  security: unsafe back link not rendered
+PASS  security: unsafe image addresses not rendered
+PASS  security: markup in text shown as text, never run
+PASS  robustness: empty property bag renders without errors
+PASS  robustness: nonsense values renders without errors
+PASS  robustness: blank title, nothing else renders without errors
+PASS  robustness: no empty heading for readers
+PASS  axe: blank header
+
+Third-party (PnP chunk) dev-mode notices:
+  - Warning: %s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child
+  - Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, ca
+
+122/122 checks passed

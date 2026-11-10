@@ -1,0 +1,69 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "b13052d3-2957-4800-83d5-cf5963855d13",
+  "alias": "ResourceAccordionWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "supportsThemeVariants": false,
+  "supportsFullBleed": false,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Advanced"
+      },
+      "title": {
+        "default": "Accordion Cards"
+      },
+      "description": {
+        "default": "A collapsible section of resource cards, each with its own icon or image, text, link and color."
+      },
+      "officeFabricIconFontName": "CollapseContent",
+      "properties": {
+        "title": "Section title",
+        "description": "A short description of what this section covers",
+        "headingLevel": "2",
+        "iconSource": "icon",
+        "iconName": "Layers",
+        "imageUrl": "",
+        "showCount": true,
+        "startExpanded": false,
+        "palette": "blue",
+        "accentColor": "#2563eb",
+        "tintColor": "#eff6ff",
+        "borderColor": "#bfdbfe",
+        "headerBackground": "#ffffff",
+        "headerHoverBackground": "#f8fafc",
+        "titleColor": "#0f1c36",
+        "descriptionColor": "#5a6a8a",
+        "chevronColor": "#5a6a8a",
+        "bodyBackground": "#ffffff",
+        "cardBackground": "#fafbfe",
+        "cardTitleColor": "#0f1c36",
+        "cardDescriptionColor": "#5a6a8a",
+        "defaultLinkText": "View Resource",
+        "useInterFont": true,
+        "cards": [
+          {
+            "id": "default-card-1",
+            "title": "Resource title",
+            "description": "A short description of this resource.",
+            "iconSource": "icon",
+            "iconName": "FileText",
+            "imageUrl": "",
+            "linkUrl": "",
+            "linkText": "",
+            "openInNewTab": false,
+            "accentMode": "section",
+            "accentColor": ""
+          }
+        ]
+      }
+    }
+  ]
+}

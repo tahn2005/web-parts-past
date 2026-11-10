@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>SharePoint host stand-in</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* Deliberately hostile "SharePoint-like" globals, to prove the web part's styles are self-contained. */
+  html { font-size: 14px; }
+  body { margin: 0; font-family: "Segoe UI", sans-serif; color: #323130; background: #fff; line-height: 1.2; }
+  h2 { font-size: 28px; font-weight: 300; margin: 20px 0; color: #0078d4; }
+  h3 { font-size: 21px; font-weight: 100; margin: 16px 0; }
+  p { margin: 10px 0; font-size: 18px; }
+  ul { padding-left: 40px; margin: 16px 0; }
+  li { margin-bottom: 8px; }
+  a, a:visited { color: #0078d4; text-decoration: underline; }
+  button { font-family: Arial; font-size: 11px; background: #eee; border: 2px outset #999; }
+  .layout { display: flex; gap: 24px; }
+  .canvas { flex: 1; min-width: 0; padding: 24px 32px; }
+  #pane { width: 320px; border-left: 1px solid #ccc; padding: 12px; font-size: 13px; }
+  #pane .field { margin: 6px 0; }
+  #pane .error { color: #a4262c; }
+</style></head>
+<body><div class="layout"><main class="canvas" id="canvas">
+<h1 style="font-size:24px">Manager Hub</h1>
+<div id="wp1"></div><div style="height:24px"></div><div id="wp2"></div>
+</main><aside id="pane" aria-label="Property pane"></aside></div>
+<script src="vendor.js"></script>
+<script src="host.js"></script>
+<script>window.__defineName='ResourceAccordionWebPartStrings'</script>
+<script src="/dist/ResourceAccordionWebPartStrings_en-us_f144a22ad6a6630a8930ed9a55ffb0f6.js"></script>
+<script>window.__defineName='PropertyControlStrings'</script>
+<script src="/pnploc/en-us.js"></script>
+<script>window.__defineName=null</script>
+<script src="/dist/resource-accordion-web-part_06797b20a77148472358.js"></script>
+</body></html>

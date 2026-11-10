@@ -1,0 +1,139 @@
+PASS  package: tenant-wide deployment (SkipFeatureDeployment)
+PASS  package: SharePoint pages only (no Teams / app-page hosts)
+PASS  package: assets are inside the package (no external CDN needed)
+PASS  package: one-card default is the shipped default
+PASS  package: no custom script required
+PASS  package: NOT available in full-width sections
+PASS  original config: same files in the package as the original
+PASS  original config: same app name, title, product ID and settings
+PASS  original config: same feature (id, title, description)
+PASS  original config: same component id, alias, bundle and strings module
+PASS  web part name: "Accordion Cards" in the toolbox (was "Resource Accordion")
+PASS  version: raised to 1.0.4.0 (above every earlier build) so the overwrite is an upgrade
+PASS  drop-in: exactly one card plus the Add tile
+PASS  drop-in: card shows default title
+PASS  drop-in: count badge reads 1 / "1 resource"
+PASS  drop-in: section is open while editing
+PASS  drop-in: card toolbar present in edit mode
+PASS  drop-in: no pane code downloaded before the pane opens
+PASS  drop-in: card without a link shows author hint, not a fake link
+PASS  axe: edit mode, default drop-in
+PASS  drop-in: no unknown SharePoint APIs used
+PASS  drop-in: no console errors/React warnings
+PASS  reader: starts collapsed
+PASS  reader: collapsed panel is hidden
+PASS  reader: no edit toolbar or Add tile
+PASS  reader: click expands
+PASS  reader: aria-controls points at the region
+PASS  reader: region labelled by the title
+PASS  reader: no "No link yet" hint shown to readers
+PASS  reader: downloads only the main bundle (no pane chunks)
+PASS  axe: reader, expanded
+PASS  reader: no console errors
+PASS  pane: selecting a card opens its settings
+PASS  pane: collapsed groups (Colors, Font, Accessibility…) can be opened in SharePoint
+PASS  pane: pane code is lazy-loaded on open
+PASS  pane: selected card is highlighted
+PASS  pane: edit button reports pressed state
+PASS  pane: title/description update the canvas
+PASS  pane: javascript: link rejected with a message
+PASS  pane: link, text and new-tab applied
+PASS  pane: accessible link name starts with visible text
+PASS  pane: links do not navigate away while editing
+PASS  icon picker: search filters icons
+PASS  icon picker: choosing an icon updates the card
+PASS  icon picker: chosen icon is marked pressed
+PASS  image: PnP file picker renders in the pane
+PASS  image: picker field exposes onSave/onPropertyChange
+PASS  image (site/link/stock): URL stored, scratch value removed
+PASS  image: card renders the image, decorative
+PASS  image: image actually loads
+PASS  upload: REST sequence ensure library -> root folder -> folder -> file
+PASS  upload: file bytes sent
+PASS  upload: unique, sanitised file name in Site Assets/AccordionCards
+PASS  upload failure: author sees the reason, previous image kept
+PASS  upload: non-image files are refused before anything is uploaded
+PASS  image URL field rejects javascript:
+PASS  card color: custom starts from the section accent
+PASS  card color: PnP color picker renders
+PASS  card color: icon uses exact accent, link darkened to pass AA
+PASS  arrange: duplicate selects the copy
+PASS  arrange: copy has a new id and same content
+PASS  arrange: move earlier from the pane
+PASS  arrange: cancelling the delete keeps the card
+PASS  arrange: delete removes card and returns to section settings
+PASS  section pane: lists cards and Add card
+PASS  section: header text updates
+PASS  section: count can be hidden
+PASS  section: heading level 3 -> cards h4
+PASS  section color: in the section's own settings, labelled "Section color"
+PASS  section color: other colors are under "More colors"
+PASS  section: custom palette starts from the previous palette
+PASS  section color: custom pickers appear in the section settings
+PASS  section color: changes the section header icon, and its tint and border follow (count badge)
+PASS  section: custom palette shows accent/tint/border pickers
+PASS  section: preset hides custom pickers
+PASS  section: accessibility notes list the amber adjustments
+PASS  section: header image
+PASS  section: font toggle switches to SharePoint font
+PASS  section: Add card opens the new card
+PASS  pane: Back returns to section settings
+PASS  canvas: clicking a card body selects it
+PASS  pane: closing clears the selection
+PASS  persistence: no helper values saved in the web part data
+PASS  pane: no unknown SharePoint APIs used
+PASS  pane: no uncaught errors
+PASS  round trip: saved page renders the authored content
+PASS  round trip: uploaded image path renders
+PASS  round trip: uploaded image displays
+PASS  axe: reader, authored content (amber, image, custom card accent)
+PASS  round trip: no console errors
+PASS  toolbar: first card cannot move earlier, last cannot move later
+PASS  toolbar: move later via keyboard
+PASS  toolbar: focus stays on the moved card's button
+PASS  toolbar: moved again
+PASS  toolbar: focus falls back when the button becomes disabled
+PASS  toolbar: delete -> focus moves to the next card
+PASS  toolbar: deleting the last card focuses Add
+PASS  toolbar: Add via keyboard adds and opens the card
+PASS  section color: custom section color shown on the header
+PASS  section color: "Match the section" cards follow it, cards with their own color keep theirs
+PASS  axe: custom section color with mixed card colors
+PASS  section color: no console errors
+PASS  robustness: empty property bag renders without errors
+PASS  robustness: null/partial cards renders without errors
+PASS  robustness: unknown palette & bad colors renders without errors
+PASS  robustness: missing icon name renders without errors
+PASS  robustness: empty section tells readers
+PASS  axe: empty section
+PASS  security: only the mailto link is rendered
+PASS  security: unsafe image URLs are not rendered
+PASS  security: markup in text is shown as text, never executed
+PASS  two instances: all element ids unique
+PASS  two instances: toggling one leaves the other alone
+PASS  layout: web part 1180px wide -> 3 column(s)
+PASS  layout: web part 968px wide -> 3 column(s)
+PASS  layout: web part 967px wide -> 2 column(s)
+PASS  layout: web part 700px wide -> 2 column(s)
+PASS  layout: web part 592px wide -> 2 column(s)
+PASS  layout: web part 591px wide -> 1 column(s)
+PASS  layout: web part 320px wide -> 1 column(s)
+PASS  isolation: SharePoint-style globals do not leak in
+PASS  reflow: no horizontal scrolling at 320px (WCAG 1.4.10)
+PASS  keyboard: Tab reaches the accordion button first
+PASS  keyboard: visible focus outline on the header
+PASS  keyboard: collapsed cards are skipped
+PASS  keyboard: Enter opens, Tab moves into the card links with a focus ring
+PASS  keyboard: Space collapses
+PASS  reduced motion: transitions disabled
+PASS  axe: forced colors (Windows High Contrast)
+PASS  axe: contrast in blue while hovering
+PASS  axe: contrast in indigo while hovering
+PASS  axe: contrast in green while hovering
+PASS  axe: contrast in amber while hovering
+
+Third-party (PnP chunk) dev-mode notices:
+  - Warning: %s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component
+  - Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all s
+
+133/133 checks passed

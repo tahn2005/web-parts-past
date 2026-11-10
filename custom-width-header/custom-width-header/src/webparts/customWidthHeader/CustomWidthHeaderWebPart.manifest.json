@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "121dcf48-85b3-4120-9d1e-7a019d67bdeb",
+  "alias": "CustomWidthHeaderWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "supportsThemeVariants": false,
+  "supportsFullBleed": true,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Advanced"
+      },
+      "title": {
+        "default": "Custom Width Header"
+      },
+      "description": {
+        "default": "A page header for full-width or regular sections, with a back link, label, icon, title and description on a color or image background."
+      },
+      "officeFabricIconFontName": "Header1",
+      "properties": {
+        "layout": "page",
+        "height": "auto",
+        "headingLevel": "auto",
+        "showBackLink": true,
+        "backLinkText": "Home",
+        "backLinkUrl": "",
+        "eyebrow": "",
+        "title": "Page title",
+        "description": "A short description of what this page covers.",
+        "iconSource": "icon",
+        "iconName": "Layers",
+        "iconImageUrl": "",
+        "backgroundType": "color",
+        "palette": "blue",
+        "backgroundColor": "#2563eb",
+        "useGradient": false,
+        "backgroundImageUrl": "",
+        "imagePosition": "center",
+        "imageTextStyle": "overlay",
+        "overlayColor": "#0f1c36",
+        "overlayOpacity": 55,
+        "textColor": "#ffffff",
+        "useManagerHubFonts": true
+      }
+    }
+  ]
+}

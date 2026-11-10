@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "quick-link-cards-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/quickLinkCards/QuickLinkCardsWebPart.js",
+          "manifest": "./src/webparts/quickLinkCards/QuickLinkCardsWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "QuickLinkCardsWebPartStrings": "lib/webparts/quickLinkCards/loc/{locale}.js",
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
+  }
+}

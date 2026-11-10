@@ -1,0 +1,288 @@
+// Ported from the original Script Editor design. Every color is a CSS variable so
+// the web part can set them per card from the property pane.
+
+.quickLinkCards {
+  container: qlc / inline-size;
+  font-family: "Segoe UI", Arial, sans-serif;
+  // Edit-mode accents. onThemeChanged sets --qlc-theme-* from the section's theme
+  // (on the web part's root element); these site-theme values are the fallback. Theme
+  // tokens only sit in plain custom properties because the production CSS minifier
+  // drops them inside shorthand properties such as `outline`.
+  --qlc-default-primary: "[theme:themePrimary, default: #0078d4]";
+  --qlc-default-neutral: "[theme:neutralTertiary, default: #a19f9d]";
+  --qlc-default-hover: "[theme:neutralLighter, default: #f3f2f1]";
+  --qlc-default-subtext: "[theme:neutralSecondary, default: #605e5c]";
+}
+
+// Cards sit in a wrapping row, so alignment applies to every row, including a
+// partly filled last one. Right-to-left reverses the row, so the first card sits on
+// the right. "Cards per row" is a maximum: as the section gets narrower, fewer cards
+// fit per row (at least ~280px each), down to one on phones, and the cards in each
+// row share its width evenly.
+.grid {
+  --qlc-per-row: var(--qlc-columns, 3);
+  display: flex;
+  flex-direction: var(--qlc-direction, row);
+  flex-wrap: wrap;
+  gap: var(--qlc-gap, 16px);
+  justify-content: var(--qlc-align, flex-start);
+  // "Left to right" and "Right to left" are physical directions, even on pages whose
+  // language reads right to left; each card sets its own text direction.
+  direction: ltr;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@container qlc (max-width: 1167px) {
+  .grid { --qlc-per-row: min(var(--qlc-columns, 3), 3); }
+}
+
+@container qlc (max-width: 871px) {
+  .grid { --qlc-per-row: min(var(--qlc-columns, 3), 2); }
+}
+
+@container qlc (max-width: 575px) {
+  .grid { --qlc-per-row: 1; }
+}
+
+.grid > .card {
+  flex: 0 0 calc((100% - (var(--qlc-per-row) - 1) * var(--qlc-gap, 16px)) / var(--qlc-per-row));
+  // Without this, a long word or URL would make the card wider than its share.
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  margin: 0;
+  background: var(--qlc-card-bg, #ffffff);
+  border: 1px solid var(--qlc-border, #d6dbe1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  min-height: 80px;
+}
+
+.cardImage {
+  // Never more than about a third of a narrow card, so the text keeps room.
+  width: min(var(--qlc-image-width, 120px), 35%);
+  flex-shrink: 0;
+  position: relative;
+
+  // Positioned so the photo is cropped to the card's height instead of setting it:
+  // a tall portrait image can't stretch the whole row.
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.cardContent {
+  padding: 10px 16px;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-wrap: break-word;
+}
+
+.cardTitle {
+  margin: 0;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--qlc-title, #111111);
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.accentLine {
+  width: 50px;
+  height: 3px;
+  background: var(--qlc-accent, #c8102e);
+  margin: 6px 0 8px;
+}
+
+.cardDescription {
+  color: var(--qlc-description, #6d6d6d);
+  font-size: 12px;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.cardButton {
+  display: inline-block;
+  background: var(--qlc-button-bg, #181b23);
+  color: var(--qlc-button-text, #ffffff) !important;
+  text-decoration: none !important;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 6px 12px;
+  font-size: 11px;
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: filter 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    filter: brightness(0.75);
+  }
+}
+
+// Edit mode only: a button whose link hasn't been filled in yet.
+.cardButtonInactive {
+  opacity: 0.6;
+}
+
+.noLinkHint,
+.uploadingNote {
+  margin-top: 4px;
+  font-size: 11px;
+  font-style: italic;
+  // Drawn on the card, so it uses the card's own text color, not the section theme
+  // (which can be white on "Strong" sections).
+  color: var(--qlc-description, #6d6d6d);
+}
+
+// Text for screen readers only.
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ---- Edit mode (mirrors the built-in Quick Links item toolbar) ----
+
+.addBar {
+  // Leaves room for a first-row card's toolbar, which sticks 16px above the card.
+  margin-bottom: 20px;
+}
+
+.addButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 0;
+  padding: 4px 8px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--qlc-theme-primary, var(--qlc-default-primary));
+  cursor: pointer;
+
+  &:hover {
+    background: var(--qlc-theme-hover, var(--qlc-default-hover));
+  }
+}
+
+.editing .card {
+  cursor: pointer;
+}
+
+.editing .card:hover,
+.editing .card:focus-within {
+  outline: 1px solid var(--qlc-theme-neutral, var(--qlc-default-neutral));
+}
+
+.editing .card.selected {
+  // A ring (not an outline), so the keyboard focus outline below can show at the same time.
+  outline: none;
+  box-shadow: 0 0 0 2px var(--qlc-theme-primary, var(--qlc-default-primary)), 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+// Keyboard focus looks different from selection, so both can be seen at once.
+.editing .card:focus-visible {
+  outline: 2px dashed var(--qlc-theme-primary, var(--qlc-default-primary));
+  outline-offset: 3px;
+}
+
+.toolbar {
+  // Sits on the card's top edge, like SharePoint's own toolbars, so it never
+  // covers the title.
+  position: absolute;
+  top: -16px;
+  right: 8px;
+  z-index: 1;
+  display: flex;
+  background: #ffffff;
+  box-shadow: 0 1.6px 3.6px rgba(0, 0, 0, 0.13), 0 0.3px 0.9px rgba(0, 0, 0, 0.11);
+  // Hidden by opacity rather than display:none so its buttons stay reachable with Tab;
+  // tabbing into it (focus-within) shows it.
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card:hover .toolbar,
+.card:focus-within .toolbar,
+.card.selected .toolbar {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.toolButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  color: #323130;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: #f3f2f1;
+    color: #0078d4;
+  }
+}
+
+.imagePlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 80px;
+  background: #f3f2f1;
+  color: #605e5c;
+  font-size: 11px;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+// Shown only while the page is being edited and no cards exist yet.
+.placeholder {
+  border: 1px dashed var(--qlc-theme-neutral, var(--qlc-default-neutral));
+  padding: 24px;
+  text-align: center;
+  color: var(--qlc-theme-subtext, var(--qlc-default-subtext));
+  font-size: 14px;
+
+  button {
+    margin-top: 12px;
+    background: #181b23;
+    color: #ffffff;
+    border: 0;
+    padding: 8px 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "401d0a84-2267-4e62-bd30-1ee9741aa4e1",
+  "alias": "QuickLinkCardsWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart",
+    "SharePointFullPage",
+    "TeamsTab"
+  ],
+  "supportsThemeVariants": true,
+  "preconfiguredEntries": [
+    {
+      "groupId": "cf066440-0614-43d6-98ae-0b31cf14c7c3",
+      "group": {
+        "default": "Connections"
+      },
+      "title": {
+        "default": "Quick Link Cards"
+      },
+      "description": {
+        "default": "Image cards with a title, description and button link. Add, edit and rearrange cards right on the page."
+      },
+      "officeFabricIconFontName": "Tiles",
+      "properties": {
+        "cards": [
+          {
+            "id": "card-default-1",
+            "title": "Card title",
+            "description": "Add a short description",
+            "buttonText": "Learn more",
+            "buttonUrl": "",
+            "imageUrl": "",
+            "openInNewTab": false,
+            "customColors": false
+          }
+        ],
+        "columns": 3,
+        "alignment": "ltr",
+        "imageWidth": 120,
+        "accentColor": "#c8102e",
+        "buttonColor": "#181b23",
+        "buttonTextColor": "#ffffff",
+        "cardBackground": "#ffffff",
+        "titleColor": "#111111",
+        "descriptionColor": "#6d6d6d",
+        "borderColor": "#d6dbe1"
+      }
+    }
+  ]
+}

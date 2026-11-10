@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "quick-links-cards-client-side-solution",
+    "id": "d66b89ac-511a-4894-ac5f-43c505726c44",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.23.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Quick Link Cards web part"
+      },
+      "longDescription": {
+        "default": "Adds a \"Quick Link Cards\" web part: a grid of image cards with a title, description and button link, editable from the web part settings panel."
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "Quick Link Cards",
+        "description": "Adds the Quick Link Cards web part.",
+        "id": "f0fbbae9-5930-49a8-96de-96c9c12bbaa5",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/quick-links-cards.sppkg"
+  }
+}

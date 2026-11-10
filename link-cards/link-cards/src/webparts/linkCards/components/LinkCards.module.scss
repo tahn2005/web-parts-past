@@ -1,0 +1,247 @@
+// Link Cards. Colours arrive as CSS custom properties set per card by
+// theme.ts, already checked for contrast, so hover and focus stay in CSS.
+
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$hairline: rgba(26, 52, 97, 0.08);
+
+.root {
+  font-family: var(--lc-font);
+  line-height: 1.5;
+  text-align: left;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cols2 .grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cols3 .grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.item {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.item::before,
+.item::marker {
+  content: none;
+}
+
+// Doubled class beats SharePoint's global link styles.
+.root .card,
+.root .card:visited {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 12px;
+  border: 1px solid $hairline;
+  border-radius: 10px;
+  background-color: var(--lc-bg);
+  color: var(--lc-text);
+  text-decoration: none;
+  transition:
+    border-color 150ms $ease,
+    background-color 150ms $ease;
+}
+
+.root a.card:hover,
+.root a.card:focus-visible {
+  border-color: var(--lc-hover-border);
+  background-color: var(--lc-hover-bg);
+  color: var(--lc-text);
+}
+
+.root a.card:hover .text {
+  text-decoration: underline;
+}
+
+.root a.card:focus-visible {
+  outline: 2px solid var(--lc-focus);
+  outline-offset: 2px;
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--lc-icon);
+}
+
+.text {
+  min-width: 0;
+  color: var(--lc-text);
+  font-size: 13.6px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.placeholder {
+  font-style: italic;
+}
+
+.hint {
+  display: block;
+  color: var(--lc-hint);
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+// Edit mode -----------------------------------------------------------------
+
+.editing .card {
+  padding-right: 136px;
+  cursor: pointer;
+}
+
+.selected .card,
+.selected .card:hover {
+  border-color: var(--lc-focus);
+  box-shadow: 0 0 0 1px var(--lc-focus);
+}
+
+.tools {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid rgba(26, 52, 97, 0.18);
+  border-radius: 6px;
+  background-color: #ffffff;
+  transform: translateY(-50%);
+}
+
+.toolButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #374151;
+  cursor: pointer;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #eef1f8;
+    color: #0f1c36;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #1d4ed8;
+    outline-offset: 0;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+
+.addTile {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  margin: 0;
+  padding: 12px;
+  border: 1.5px dashed #5a6a8a;
+  border-radius: 10px;
+  background: transparent;
+  color: #1a3461;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background-color: #f4f6fb;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #1d4ed8;
+    outline-offset: 2px;
+  }
+}
+
+// Preferences ----------------------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  .root .card {
+    transition: none;
+  }
+}
+
+// Windows High Contrast: keep every card boundary and focus ring visible.
+@media (forced-colors: active) {
+  .root .card,
+  .tools {
+    border-color: CanvasText;
+  }
+
+  .root a.card {
+    border-color: LinkText;
+  }
+
+  .root a.card:focus-visible,
+  .toolButton:focus-visible,
+  .addTile:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .selected .card {
+    outline: 2px solid Highlight;
+  }
+}

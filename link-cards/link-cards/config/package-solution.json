@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Link Cards",
+    "id": "d7c0f582-52fd-4aaa-822f-bc5454992044",
+    "version": "1.0.1.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.23.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Link Cards: a grid of link cards for SharePoint pages."
+      },
+      "longDescription": {
+        "default": "Link Cards adds a responsive grid of link cards to SharePoint pages. Page authors add, arrange and style the cards, each with its own text, icon, icon color and link address."
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "Link Cards",
+        "description": "Activates the Link Cards web part.",
+        "id": "5be8b1fd-3617-440c-81dd-1ff2fa41153f",
+        "version": "1.0.1.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/link-cards.sppkg"
+  }
+}

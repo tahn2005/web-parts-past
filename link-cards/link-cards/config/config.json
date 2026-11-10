@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "link-cards-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/linkCards/LinkCardsWebPart.js",
+          "manifest": "./src/webparts/linkCards/LinkCardsWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "LinkCardsWebPartStrings": "lib/webparts/linkCards/loc/{locale}.js",
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
+  }
+}

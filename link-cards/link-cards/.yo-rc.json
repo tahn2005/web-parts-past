@@ -1,0 +1,20 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.14.0",
+    "sdksVersions": {},
+    "version": "1.23.2",
+    "libraryName": "link-cards",
+    "libraryId": "d7c0f582-52fd-4aaa-822f-bc5454992044",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "link-cards",
+    "solutionShortDescription": "Link Cards web part for SharePoint pages.",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart",
+    "template": "react",
+    "useGulp": true
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "9cdfb3f9-fb97-44a5-865b-06621546998c",
+  "alias": "LinkCardsWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "supportsThemeVariants": false,
+  "supportsFullBleed": false,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Advanced"
+      },
+      "title": {
+        "default": "Link Cards"
+      },
+      "description": {
+        "default": "A grid of link cards, each with its own text, icon, icon color and link address."
+      },
+      "officeFabricIconFontName": "Link",
+      "properties": {
+        "palette": "blue",
+        "iconColor": "#2563eb",
+        "textColor": "#0f1c36",
+        "cardBackground": "#fafbfe",
+        "columns": "auto",
+        "useInterFont": true,
+        "cards": [
+          {
+            "id": "default-link-1",
+            "text": "Link title",
+            "url": "",
+            "openInNewTab": true,
+            "iconName": "ExternalLink",
+            "iconColorMode": "section",
+            "iconColor": ""
+          }
+        ]
+      }
+    }
+  ]
+}

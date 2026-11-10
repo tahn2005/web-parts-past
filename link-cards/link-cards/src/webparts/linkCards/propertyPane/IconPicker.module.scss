@@ -1,0 +1,91 @@
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.current {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #323130;
+}
+
+.currentIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: #eff6ff;
+  color: #2563eb;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+  gap: 4px;
+  max-height: 216px;
+  padding: 4px;
+  overflow-y: auto;
+  border: 1px solid #8a8886;
+  border-radius: 2px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: #323130;
+  cursor: pointer;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background-color: #f3f2f1;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #0078d4;
+    outline-offset: 1px;
+  }
+}
+
+.selected,
+.selected:hover {
+  border-color: #0078d4;
+  background-color: #deecf9;
+  color: #004578;
+}
+
+.status:empty {
+  display: none;
+}
+
+.status {
+  font-size: 12px;
+  color: #605e5c;
+}
+
+@media (forced-colors: active) {
+  .selected {
+    outline: 2px solid Highlight;
+  }
+}

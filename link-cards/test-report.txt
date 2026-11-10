@@ -1,0 +1,123 @@
+PASS  naming: package file is link-cards.sppkg
+PASS  naming: shows as "Link Cards" (app, feature and toolbox)
+PASS  naming: no other product or web part names anywhere inside (SharePoint API names aside)
+PASS  naming: every bundled file is named link-cards (no numbered chunks)
+PASS  package: NOT available in full-width sections
+PASS  package: SharePoint pages only
+PASS  package: tenant-wide deployment
+PASS  package: no custom script required
+PASS  package: version 1.0.1.0
+PASS  package: starts with one card
+PASS  drop-in: one card plus the Add tile
+PASS  drop-in: card shows "Link title" with the external-link icon
+PASS  drop-in: no address yet -> not a link, author is told
+PASS  drop-in: card toolbar in edit mode
+PASS  drop-in: no pane code downloaded until the pane opens
+PASS  axe: edit mode, default card
+PASS  axe: edit mode, default card — nothing left for manual contrast review
+PASS  drop-in: no console errors and no unknown SharePoint APIs
+PASS  reader: cards with addresses are links to them
+PASS  reader: new-tab links are safe and say so to screen readers
+PASS  reader: same-tab links are plain links
+PASS  reader: a card without an address is plain text, not a fake link
+PASS  reader: no edit toolbar, Add tile or author hints
+PASS  reader: cards are a list
+PASS  axe: reader with links and a plain card
+PASS  axe: reader with links and a plain card — nothing left for manual contrast review
+PASS  look: React sizes (12px padding, 10px radius, 12px gap, 16px icon, 13.6px/500 text)
+PASS  look: React colours (card #fafbfe, amber icon) and no underline
+PASS  look: hover tints the card and border like the React version (amber)
+PASS  axe: reader while hovering a card
+PASS  axe: reader while hovering a card — nothing left for manual contrast review
+PASS  reader: no console errors
+PASS  pane: selecting a card opens its settings
+PASS  pane: collapsed groups (Colors, Font, Accessibility…) can be opened in SharePoint
+PASS  pane: pane code loads on demand
+PASS  pane: selected card is highlighted and its edit button pressed
+PASS  pane: link text updates the card
+PASS  pane: unsafe address rejected with a message
+PASS  pane: address makes it a link
+PASS  pane: links do not navigate while editing (selects the card)
+PASS  pane: new-tab setting
+PASS  pane: icon picker changes the icon
+PASS  pane: custom icon colour starts from the current one
+PASS  pane: icon colour applied
+PASS  arrange: duplicate selects the copy
+PASS  arrange: move earlier
+PASS  arrange: cancelling the delete keeps the card
+PASS  arrange: delete removes it and returns to the settings
+PASS  section: cards listed with an Add button
+PASS  section: custom colour starts from the previous palette and shows a picker
+PASS  section: preset hides the picker
+PASS  section: a low-contrast text colour is corrected and explained
+PASS  section: corrected text passes 4.5:1
+PASS  section: columns setting
+PASS  section: font can fall back to SharePoint's
+PASS  section: Add opens the new card
+PASS  pane: Back returns to the settings
+PASS  canvas: clicking a card selects it
+PASS  pane: closing clears the selection
+PASS  saving: no helper values stored
+PASS  pane: no errors and no unknown SharePoint APIs
+PASS  round trip: authored link renders as a link
+PASS  round trip: the added card with text but no address shows as plain text
+PASS  axe: saved page, reader
+PASS  axe: saved page, reader — nothing left for manual contrast review
+PASS  round trip: no console errors
+PASS  toolbar: first can't move earlier, last can't move later
+PASS  toolbar: move with the keyboard; focus stays on the button
+PASS  toolbar: delete moves focus to the next card
+PASS  toolbar: deleting the last card focuses Add
+PASS  toolbar: Add with the keyboard adds and opens a card
+PASS  robustness: empty property bag renders without errors
+PASS  robustness: null and partial cards renders without errors
+PASS  robustness: nonsense values renders without errors
+PASS  robustness: no cards -> nothing shown to readers (no empty list)
+PASS  security: only safe addresses become links
+PASS  security: markup in text is shown as text, never run
+PASS  security: an unsafe address with no text is hidden, not shown as text
+PASS  a link with no text is named by its address
+PASS  axe: odd content
+PASS  axe: odd content — nothing left for manual contrast review
+PASS  layout (automatic): 1000px wide -> 2 column(s)
+PASS  layout (automatic): 540px wide -> 2 column(s)
+PASS  layout (automatic): 539px wide -> 1 column(s)
+PASS  layout (automatic): 320px wide -> 1 column(s)
+PASS  layout (up to 3): 760px wide -> 3 column(s)
+PASS  layout (up to 3): 759px wide -> 2 column(s)
+PASS  layout (up to 3): 539px wide -> 1 column(s)
+PASS  layout (up to 2): 1000px wide -> 2 column(s)
+PASS  layout (up to 1): 1000px wide -> 1 column(s)
+PASS  isolation: SharePoint-style globals do not leak in
+PASS  reflow: nothing scrolls sideways at 320px (reading)
+PASS  reflow: nothing scrolls sideways at 320px (editing)
+PASS  keyboard: Tab visits each link once and skips plain-text cards
+PASS  keyboard: visible 2px focus ring that meets 3:1 on the page and the card
+PASS  keyboard: focus also shows the hover tint
+PASS  target size: each link is at least 44px tall
+PASS  blue: icon ≥3:1 at rest and on hover, text ≥4.5:1
+PASS  axe: blue while hovering
+PASS  axe: blue while hovering — nothing left for manual contrast review
+PASS  indigo: icon ≥3:1 at rest and on hover, text ≥4.5:1
+PASS  axe: indigo while hovering
+PASS  axe: indigo while hovering — nothing left for manual contrast review
+PASS  green: icon ≥3:1 at rest and on hover, text ≥4.5:1
+PASS  axe: green while hovering
+PASS  axe: green while hovering — nothing left for manual contrast review
+PASS  amber: icon ≥3:1 at rest and on hover, text ≥4.5:1
+PASS  axe: amber while hovering
+PASS  axe: amber while hovering — nothing left for manual contrast review
+PASS  pale custom colours are corrected (card 1): icon ≥3:1, text ≥4.5:1
+PASS  pale custom colours are corrected (card 4): icon ≥3:1, text ≥4.5:1
+PASS  axe: pale custom colours
+PASS  axe: pale custom colours — nothing left for manual contrast review
+PASS  reduced motion: no transitions
+PASS  axe: Windows High Contrast
+PASS  axe: Windows High Contrast — nothing left for manual contrast review
+PASS  two Link Cards on a page: ids unique, edit controls clean
+PASS  axe: two Link Cards in edit mode
+PASS  axe: two Link Cards in edit mode — nothing left for manual contrast review
+
+Third-party (PnP) dev-mode notices:
+
+119/119 checks passed

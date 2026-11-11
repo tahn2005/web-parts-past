@@ -3,7 +3,7 @@
   "solution": {
     "name": "Link Cards",
     "id": "d7c0f582-52fd-4aaa-822f-bc5454992044",
-    "version": "1.0.1.0",
+    "version": "1.0.2.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -30,7 +30,7 @@
         "title": "Link Cards",
         "description": "Activates the Link Cards web part.",
         "id": "5be8b1fd-3617-440c-81dd-1ff2fa41153f",
-        "version": "1.0.1.0"
+        "version": "1.0.2.0"
       }
     ]
   },

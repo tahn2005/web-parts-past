@@ -3,7 +3,7 @@
   "solution": {
     "name": "Resource Cards",
     "id": "547f614f-66fc-47fe-85e4-c698041436d7",
-    "version": "1.0.1.0",
+    "version": "1.0.2.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "developer": {
@@ -29,7 +29,7 @@
         "title": "Resource Cards",
         "description": "Adds the Resource Cards web part to the site.",
         "id": "4fa33e94-3ac1-452a-b6c4-b1006bb46c30",
-        "version": "1.0.1.0"
+        "version": "1.0.2.0"
       }
     ]
   },

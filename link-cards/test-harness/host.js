@@ -116,6 +116,7 @@
       return Promise.resolve();
     }
     onPropertyPaneFieldChanged() {}
+    onPropertyPaneConfigurationStart() {}
     onPropertyPaneConfigurationComplete() {}
     loadPropertyPaneResources() {
       return Promise.resolve();
@@ -305,6 +306,39 @@
     return wrap;
   }
 
+  // ------------------------------------------------------ pane requests
+  // SharePoint keeps one pane for the page and one "was it opened by a web part" mark, set by
+  // whoever asked last: a web part's own open() (true) or the page itself (false), for example
+  // when the author selects a web part or uses its edit button. Opening a pane that is already
+  // open tells the web part it was showing "configuration complete" and the new one
+  // "configuration start". The classic pane sets the mark before those events and raises
+  // "start" 400ms after a fresh open; the newer content panel sets it after them.
+  window.__paneMode = new URLSearchParams(location.search).get('pane') || 'classic';
+  async function requestPane(wp, byWebPart) {
+    const wasOpen = pane.open;
+    const previous = pane.wp;
+    const classic = __paneMode === 'classic';
+    if (!wp.__paneLoaded) {
+      await wp.loadPropertyPaneResources();
+      wp.__paneLoaded = true;
+    }
+    pane.wp = wp;
+    pane.open = true;
+    if (classic) pane.byWebPart = byWebPart;
+    renderPane();
+    if (wasOpen) {
+      previous.onPropertyPaneConfigurationComplete();
+      wp.onPropertyPaneConfigurationStart();
+    } else if (classic) {
+      setTimeout(() => pane.open && pane.wp === wp && wp.onPropertyPaneConfigurationStart(), 400);
+    } else {
+      wp.onPropertyPaneConfigurationStart();
+    }
+    if (!classic) pane.byWebPart = byWebPart;
+  }
+  /** The page opening the pane for a web part: its edit button, or selecting it while the pane is open. */
+  window.hostOpenPane = (wp) => requestPane(wp, false);
+
   // -------------------------------------------------------------- the host
   window.mountWebPart = async function ({ mountId, properties, displayMode, instanceId, moduleId }) {
     const prefix = (moduleId || window.__MODULE_ID).split('_')[0] + '_';
@@ -326,20 +360,16 @@
         legacyPageContext: {}
       }),
       propertyPane: {
-        isPropertyPaneOpen: () => pane.open && pane.wp === wp,
-        open: async () => {
-          pane.wp = wp;
-          pane.open = true;
-          if (!wp.__paneLoaded) {
-            await wp.loadPropertyPaneResources();
-            wp.__paneLoaded = true;
-          }
-          renderPane();
-        },
+        // Like SharePoint: both are about the pane as a whole, whichever web part it shows.
+        isPropertyPaneOpen: () => pane.open,
+        isRenderedByWebPart: () => !!pane.byWebPart,
+        open: () => requestPane(wp, true),
         close: () => {
+          const current = pane.wp;
           pane.open = false;
+          if (__paneMode === 'contentPanel') pane.byWebPart = undefined;
           renderPane();
-          wp.onPropertyPaneConfigurationComplete();
+          current.onPropertyPaneConfigurationComplete();
         },
         refresh: () => {
           if (pane.open && pane.wp === wp) renderPane();

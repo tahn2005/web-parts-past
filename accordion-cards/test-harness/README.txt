@@ -1,10 +1,12 @@
-Tests for Accordion Cards (v1.0.4).
+Tests for Accordion Cards (v1.0.5).
 
 test.js loads the real production bundle (accordion-cards/dist) in Chromium
 inside a stand-in SharePoint host (host.js). It covers the package (names,
 version, no full-width sections), the property pane, uploads, editing on the
-page, saving, security, layout, keyboard and accessibility.
-Results: ../test-report.txt (133/133).
+page, card settings staying open until the author leaves them (in both the
+classic property pane and the newer content panel), saving, security, layout,
+keyboard and accessibility.
+Results: ../test-report.txt (175/175).
 
 combined-page-test/ puts Accordion Cards and Custom Width Header together on
 realistic SharePoint-style pages and audits whole pages: heading outline, one

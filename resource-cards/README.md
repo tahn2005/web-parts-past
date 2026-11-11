@@ -105,7 +105,7 @@ one below the heading above the cards. For example, if the section title is a
 |---|---|
 | Lint (SPFx ESLint rules) and TypeScript strict compile | Clean, no warnings |
 | Unit tests: colour contrast, link and image-address safety, upload file rules (`npm run build`) | 13/13 pass |
-| End-to-end on the **production bundle** in a simulated SharePoint page (`tests/e2e`) | 131/131 pass |
+| End-to-end on the **production bundle** in a simulated SharePoint page (`tests/e2e`) | 175/175 pass |
 | Pixel comparison of the cards with the React app at 1440/1100/700/420px windows | Identical column widths at every size; about 1% of pixels differ (text anti-aliasing only) |
 | axe-core (WCAG 2.2 AA + best practice): view, edit, empty state, property pane (icon and image fields), cards with images, all preset and a very light custom colour, on white, neutral, soft, strong and dark section backgrounds | 0 violations |
 | `npm audit --omit=dev` (shipped dependencies) | 0 vulnerabilities |
@@ -113,7 +113,8 @@ one below the heading above the cards. For example, if the section title is a
 
 The end-to-end suite covers: rendering, page CSS not leaking in, font loading,
 edit mode, every property pane control, add/move/delete from both the canvas
-and the pane, focus management and screen-reader announcements, saving and
+and the pane, card settings staying open until the author leaves them (in both
+the classic property pane and the newer content panel), focus management and screen-reader announcements, saving and
 reloading, malformed saved data, script injection attempts in every field,
 `javascript:`/`data:` links, custom images (upload via SharePoint REST to Site Assets,
 file type and size checks, refused uploads, pasted links, sizes, alt text, broken

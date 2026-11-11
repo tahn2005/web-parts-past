@@ -1,11 +1,13 @@
-Tests for Link Cards (v1.0.1).
+Tests for Link Cards (v1.0.2).
 
 test.js loads the real production bundle (link-cards/dist) in Chromium inside a
 stand-in SharePoint host (host.js). It covers the package (names, version, no
-full-width sections), editing on the page and in the property pane, saving,
+full-width sections), editing on the page and in the property pane, card
+settings staying open until the author leaves them (in both the classic
+property pane and the newer content panel), saving,
 security, odd content, layout, keyboard, focus, target size, contrast at rest
 and on hover for every color scheme, and Windows High Contrast.
-Results: ../test-report.txt (119/119).
+Results: ../test-report.txt (161/161).
 
 combined-page-test/ puts Link Cards together with the other web parts on
 realistic SharePoint-style pages and audits whole pages: heading outline, one

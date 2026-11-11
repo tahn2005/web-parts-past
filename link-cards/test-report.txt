@@ -6,7 +6,7 @@ PASS  package: NOT available in full-width sections
 PASS  package: SharePoint pages only
 PASS  package: tenant-wide deployment
 PASS  package: no custom script required
-PASS  package: version 1.0.1.0
+PASS  package: version 1.0.2.0
 PASS  package: starts with one card
 PASS  drop-in: one card plus the Add tile
 PASS  drop-in: card shows "Link title" with the external-link icon
@@ -117,7 +117,49 @@ PASS  axe: Windows High Contrast — nothing left for manual contrast review
 PASS  two Link Cards on a page: ids unique, edit controls clean
 PASS  axe: two Link Cards in edit mode
 PASS  axe: two Link Cards in edit mode — nothing left for manual contrast review
+PASS  stay on card: a pause while typing keeps the card settings open [property pane]
+PASS  stay on card: the card stays highlighted on the page [property pane]
+PASS  stay on card: typing continues on the same card [property pane]
+PASS  stay on card: pasting a link address keeps the card settings open [property pane]
+PASS  stay on card: choosing an icon keeps the card settings open [property pane]
+PASS  stay on card: repeated idle events never leave the card [property pane]
+PASS  stay on card: the Back button is what returns to the settings [property pane]
+PASS  stay on card: idle events on the settings page change nothing [property pane]
+PASS  stay on card: closing the pane ends card editing [property pane]
+PASS  stay on card: reopening the pane afterwards shows the settings [property pane]
+PASS  stay on card: SharePoint re-drawing the pane for this web part keeps the card [property pane]
+PASS  stay on card: …and it still stays after the next pause [property pane]
+PASS  stay on card: a page request right after a card click does not undo it [property pane]
+PASS  leaving: the pane moving to another web part ends card editing [property pane]
+PASS  leaving: the web part's own edit button opens the settings [property pane]
+PASS  stay on card: a card opened from the settings list stays open too [property pane]
+PASS  two web parts: selecting a card in the second takes the pane over [property pane]
+PASS  two web parts: the first one drops its selection [property pane]
+PASS  two web parts: edits go to the card that is showing, and it stays open [property pane]
+PASS  stay on card: publishing ends card editing [property pane]
+PASS  stay on card: no errors and no unknown SharePoint APIs [property pane]
+PASS  stay on card: a pause while typing keeps the card settings open [content panel]
+PASS  stay on card: the card stays highlighted on the page [content panel]
+PASS  stay on card: typing continues on the same card [content panel]
+PASS  stay on card: pasting a link address keeps the card settings open [content panel]
+PASS  stay on card: choosing an icon keeps the card settings open [content panel]
+PASS  stay on card: repeated idle events never leave the card [content panel]
+PASS  stay on card: the Back button is what returns to the settings [content panel]
+PASS  stay on card: idle events on the settings page change nothing [content panel]
+PASS  stay on card: closing the pane ends card editing [content panel]
+PASS  stay on card: reopening the pane afterwards shows the settings [content panel]
+PASS  stay on card: SharePoint re-drawing the pane for this web part keeps the card [content panel]
+PASS  stay on card: …and it still stays after the next pause [content panel]
+PASS  stay on card: a page request right after a card click does not undo it [content panel]
+PASS  leaving: the pane moving to another web part ends card editing [content panel]
+PASS  leaving: the web part's own edit button opens the settings [content panel]
+PASS  stay on card: a card opened from the settings list stays open too [content panel]
+PASS  two web parts: selecting a card in the second takes the pane over [content panel]
+PASS  two web parts: the first one drops its selection [content panel]
+PASS  two web parts: edits go to the card that is showing, and it stays open [content panel]
+PASS  stay on card: publishing ends card editing [content panel]
+PASS  stay on card: no errors and no unknown SharePoint APIs [content panel]
 
 Third-party (PnP) dev-mode notices:
 
-119/119 checks passed
+161/161 checks passed

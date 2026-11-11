@@ -61,7 +61,8 @@ let BASE;
 const results = [];
 let page;
 
-function check(name, ok, detail) {
+function check(name, ok, detail) { return checkAll(name, ok, detail); }
+function checkAll(name, ok, detail) {
   results.push({ name, ok: !!ok, detail });
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail !== undefined ? '  — ' + (typeof detail === 'string' ? detail : JSON.stringify(detail)) : ''}`);
 }
@@ -235,6 +236,7 @@ let server;
   await page.locator('#wp').getByRole('button', { name: 'Edit card: Recruiting Process' }).click();
   check('…canvas Edit highlights that card', (await selectedCount()) === 1);
   await page.evaluate(() => window.host.closePane());
+  await page.waitForTimeout(700); // the web part waits for the pane to settle before it ends card editing
   check('closing the pane clears the selection highlight', (await selectedCount()) === 0);
 
   // ---------------------------------------------------------------- persistence
@@ -351,6 +353,7 @@ let server;
   await boot('edit=1');
   await page.locator('#wp').getByRole('button', { name: 'Edit card: Interviewing' }).click();
   await page.evaluate(() => window.host.setMode(1));
+  await page.waitForTimeout(50); // React 18 applies the re-render on the next tick
   check('leaving edit mode closes the pane and removes edit controls', !(await page.evaluate(() => window.host.paneOpen)) && (await page.locator('#wp button').count()) === 0);
 
 
@@ -459,6 +462,103 @@ let server;
   await page.waitForTimeout(400);
   check('readers see the icon, not a broken image, when an image was deleted', (await page.locator('#wp li').nth(0).locator('img').count()) === 0 && (await page.locator('#wp li').nth(0).locator('svg').count()) >= 1);
   check('a stored data: image address is never rendered', (await page.locator('#wp li').nth(1).locator('img').count()) === 0);
+
+  // ---------------------------------------------------------------- card settings stay open until the author leaves them
+  for (const kind of ['classic', 'contentPanel']) {
+    await boot(`edit=1&pane=${kind}`);
+    const check = (name, ok, detail) => checkAll(`${name} [${kind === 'classic' ? 'property pane' : 'content panel'}]`, ok, detail);
+    const SETTLE = 700; // longer than the web part's own 500ms wait
+    const header = () => page.locator('#pane .pane-header').textContent();
+    const selected = () => page.locator('#wp li').evaluateAll((els) => els.filter((e) => /(^|\s)selected_/.test(e.className)).length);
+    const input = (label) => page.locator('#pane .field', { has: page.locator(`label:text-is("${label}")`) }).locator('input,textarea');
+    // What SharePoint does 5 seconds after the author's last change, while the pane is still open on this
+    // web part: it raises "configuration complete", and it redraws the pane on the next change.
+    const idleComplete = async (times = 1) => {
+      for (let i = 0; i < times; i++) await page.evaluate(() => window.host.instance.onPropertyPaneConfigurationComplete());
+      await page.waitForTimeout(SETTLE);
+      await page.evaluate(() => window.host.context.propertyPane.refresh());
+    };
+
+    await page.locator('#wp').getByRole('button', { name: 'Edit card: Greenhouse - Our ATS' }).click();
+    await input('Title').fill('Greenhouse typed so');
+    await idleComplete();
+    check('stay on card: a pause while typing keeps the card settings open', (await header()).includes('card 2 of 3'), await header());
+    check('stay on card: the card stays highlighted on the page', (await selected()) === 1);
+    await input('Title').fill('Greenhouse typed so far');
+    check('stay on card: typing continues on the same card', (await props()).cards[1].title === 'Greenhouse typed so far' && (await header()).includes('card 2 of 3'));
+
+    await input('Link URL').fill('https://contoso.sharepoint.com/sites/hr/pasted.aspx');
+    await idleComplete();
+    check('stay on card: pasting a link address keeps the card settings open', (await header()).includes('card 2 of 3') && (await props()).cards[1].url === 'https://contoso.sharepoint.com/sites/hr/pasted.aspx');
+
+    await page.locator('#pane label[title="Star"]').click();
+    await idleComplete();
+    check('stay on card: choosing an icon keeps the card settings open', (await header()).includes('card 2 of 3') && (await props()).cards[1].icon === 'Star', (await props()).cards[1].icon);
+
+    await page.locator('#pane fieldset', { has: page.locator('legend:text-is("Card accent colour")') }).locator('label[title="Green (Support & Retain)"]').click();
+    await idleComplete();
+    check('stay on card: choosing a colour keeps the card settings open', (await header()).includes('card 2 of 3') && (await props()).cards[1].accentColor === '#059669');
+
+    await idleComplete(5);
+    await idleComplete();
+    check('stay on card: repeated idle events never leave the card', (await header()).includes('card 2 of 3') && (await selected()) === 1);
+
+    await page.locator('#pane button', { hasText: 'Done: back to all settings' }).click();
+    check('stay on card: the Done button is what returns to the settings', (await page.locator('#pane h2').allTextContents()).join('|') === 'Cards|Appearance' && (await selected()) === 0);
+    await idleComplete();
+    check('stay on card: idle events on the settings page change nothing', (await page.locator('#pane h2').allTextContents()).join('|') === 'Cards|Appearance');
+
+    await page.locator('#wp').getByRole('button', { name: 'Edit card: Interviewing' }).click();
+    await page.waitForTimeout(50);
+    await page.evaluate(() => window.host.closePane());
+    await page.waitForTimeout(SETTLE);
+    check('stay on card: closing the pane ends card editing', (await selected()) === 0);
+    await page.evaluate(() => window.host.context.propertyPane.open());
+    check('stay on card: reopening the pane afterwards shows the settings', (await page.locator('#pane h2').allTextContents()).join('|') === 'Cards|Appearance');
+
+    // The page itself can ask for the pane around a card click, or when the author clicks back into the web part.
+    await page.locator('#wp').getByRole('button', { name: 'Edit card: Interviewing' }).click();
+    await page.waitForTimeout(SETTLE);
+    await page.evaluate(() => window.host.hostOpenPane());
+    await page.waitForTimeout(50);
+    check('stay on card: SharePoint re-drawing the pane for this web part keeps the card', (await header()).includes('card 3 of 3') && (await selected()) === 1, await header());
+    await input('Title').fill('After a re-draw');
+    await idleComplete();
+    check('stay on card: …and it still stays after the next pause', (await header()).includes('card 3 of 3') && (await selected()) === 1, await header());
+    await page.evaluate(() => { document.querySelector('#wp button[aria-label^="Edit card: Recruiting"]').click(); setTimeout(() => window.host.hostOpenPane(), 0); });
+    await page.waitForTimeout(50);
+    await idleComplete();
+    check('stay on card: a page request right after a card click does not undo it', (await header()).includes('card 1 of 3') && (await selected()) === 1, await header());
+
+    // The pane leaves for something else on the page, then the author comes back with the web part's edit button.
+    await page.evaluate(() => window.host.paneMovedAway());
+    await page.waitForTimeout(SETTLE);
+    check('leaving: the pane moving to another web part ends card editing', (await selected()) === 0);
+    await page.evaluate(() => window.host.hostOpenPane());
+    await page.waitForTimeout(SETTLE);
+    check("leaving: the web part's own edit button opens the settings", (await page.locator('#pane h2').allTextContents()).join('|') === 'Cards|Appearance' && (await selected()) === 0);
+    await page.locator('#pane button[aria-label^="Edit card: Greenhouse"]').click();
+    await page.waitForTimeout(50);
+    await input('Title').fill('From the list');
+    await idleComplete();
+    check('stay on card: a card opened from the settings list stays open too', (await header()).includes('card 2 of 3') && (await props()).cards[1].title === 'From the list' && (await selected()) === 1, await header());
+    await page.locator('#pane button', { hasText: 'Add card' }).count();
+    await page.locator('#wp').getByRole('button', { name: 'Add card' }).click();
+    await page.waitForTimeout(50);
+    await idleComplete();
+    check('stay on card: a newly added card stays open too', (await header()).includes('card 4 of 4') && (await selected()) === 1, await header());
+    await page.evaluate(() => window.host.closePane());
+    await page.waitForTimeout(SETTLE);
+
+    // Leaving edit mode or removing the web part while a check is pending must be harmless.
+    await page.locator('#wp').getByRole('button', { name: 'Edit card: Recruiting Process' }).click();
+    await page.evaluate(() => { window.host.instance.onPropertyPaneConfigurationComplete(); window.host.setMode(1); });
+    await page.waitForTimeout(SETTLE);
+    check('stay on card: publishing ends card editing', (await selected()) === 0 && (await page.locator('#wp [role=group]').count()) === 0);
+    await page.evaluate(() => { window.host.instance.onPropertyPaneConfigurationComplete(); window.host.instance.onDispose(); });
+    await page.waitForTimeout(SETTLE);
+    check('stay on card: no console errors or warnings', (await logs()).length === 0, await logs());
+  }
 
   await browser.close();
   server.close();

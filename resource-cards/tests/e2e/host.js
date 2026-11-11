@@ -45,7 +45,9 @@
     onInit() { return Promise.resolve(); }
     onPropertyPaneFieldChanged() {}
     onDisplayModeChanged() {}
+    onPropertyPaneConfigurationStart() {}
     onPropertyPaneConfigurationComplete() {}
+    get instanceId() { return 'resource-cards-1'; }
     get disableReactivePropertyChanges() { return false; }
   }
   // Same shim sp-loader applies to framework classes so ES5-compiled web parts
@@ -155,7 +157,7 @@
     });
     if (focusedId) { const el = document.getElementById(focusedId); if (el) el.focus(); }
   }
-  host.closePane = () => { host.paneOpen = false; paneEl().classList.remove('open'); disposeCustom(); host.instance.onPropertyPaneConfigurationComplete(); };
+  host.closePane = () => { host.paneOpen = false; if (host.paneKind !== 'classic') host.paneByWebPart = undefined; paneEl().classList.remove('open'); disposeCustom(); host.instance.onPropertyPaneConfigurationComplete(); };
   // SharePoint REST stand-in for the Site Assets upload. Records every call;
   // set window.__uploadFail = <status> to simulate a refusal.
   host.httpCalls = [];
@@ -185,11 +187,32 @@
     pageContext: { web: { absoluteUrl: WEB } },
     spHttpClient: host.context_spHttpClient,
     propertyPane: {
-      open() { host.paneOpen = true; paneEl().classList.add('open'); renderPane(); },
-      refresh() { if (host.paneOpen) renderPane(); },
-      isPropertyPaneOpen() { return host.paneOpen; }
+      open() { requestPane(true); },
+      refresh() { if (host.paneOpen && !host.paneElsewhere) renderPane(); },
+      isPropertyPaneOpen() { return host.paneOpen; },
+      isRenderedByWebPart() { return !!host.paneByWebPart; }
     }
   };
+  // SharePoint keeps one "was the pane opened by a web part" mark, set by whoever asked last: the
+  // web part's own open() (true) or the page (false), e.g. the web part's edit button. Opening a
+  // pane that is already open raises "configuration complete" then "configuration start". The
+  // classic pane sets the mark before those events and raises "start" 400ms after a fresh open;
+  // the newer content panel sets it after them. Choose with ?pane=contentPanel.
+  host.paneKind = params.get('pane') || 'classic';
+  function requestPane(byWebPart) {
+    const wasOpen = host.paneOpen; const classic = host.paneKind === 'classic'; const wp = host.instance;
+    host.paneOpen = true; host.paneElsewhere = false; paneEl().classList.add('open');
+    if (classic) host.paneByWebPart = byWebPart;
+    renderPane();
+    if (wasOpen) { wp.onPropertyPaneConfigurationComplete(); wp.onPropertyPaneConfigurationStart(); }
+    else if (classic) setTimeout(() => host.paneOpen && host.instance === wp && wp.onPropertyPaneConfigurationStart(), 400);
+    else wp.onPropertyPaneConfigurationStart();
+    if (!classic) host.paneByWebPart = byWebPart;
+  }
+  /** The page opening the pane: the web part's edit button, or selecting the web part while the pane is open. */
+  host.hostOpenPane = () => requestPane(false);
+  /** The pane moving to something else on the page (another web part, a section). */
+  host.paneMovedAway = () => { host.paneByWebPart = false; paneEl().classList.remove('open'); disposeCustom(); paneEl().innerHTML = ''; host.paneElsewhere = true; host.instance.onPropertyPaneConfigurationComplete(); };
   host.setMode = (mode) => { const old = host.mode; host.mode = mode; if (mode !== 2 && host.paneOpen) host.closePane(); host.instance.onDisplayModeChanged(old); };
 
   host.mount = async (properties) => {

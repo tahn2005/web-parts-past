@@ -9,7 +9,7 @@ PASS  original config: same app name, title, product ID and settings
 PASS  original config: same feature (id, title, description)
 PASS  original config: same component id, alias, bundle and strings module
 PASS  web part name: "Accordion Cards" in the toolbox (was "Resource Accordion")
-PASS  version: raised to 1.0.4.0 (above every earlier build) so the overwrite is an upgrade
+PASS  version: raised to 1.0.5.0 (above every earlier build) so the overwrite is an upgrade
 PASS  drop-in: exactly one card plus the Add tile
 PASS  drop-in: card shows default title
 PASS  drop-in: count badge reads 1 / "1 resource"
@@ -131,9 +131,51 @@ PASS  axe: contrast in blue while hovering
 PASS  axe: contrast in indigo while hovering
 PASS  axe: contrast in green while hovering
 PASS  axe: contrast in amber while hovering
+PASS  stay on card: a pause while typing keeps the card settings open [property pane]
+PASS  stay on card: the card stays highlighted on the page [property pane]
+PASS  stay on card: typing continues on the same card [property pane]
+PASS  stay on card: pasting a link address keeps the card settings open [property pane]
+PASS  stay on card: choosing an icon keeps the card settings open [property pane]
+PASS  stay on card: repeated idle events never leave the card [property pane]
+PASS  stay on card: the Back button is what returns to the settings [property pane]
+PASS  stay on card: idle events on the settings page change nothing [property pane]
+PASS  stay on card: closing the pane ends card editing [property pane]
+PASS  stay on card: reopening the pane afterwards shows the settings [property pane]
+PASS  stay on card: SharePoint re-drawing the pane for this web part keeps the card [property pane]
+PASS  stay on card: …and it still stays after the next pause [property pane]
+PASS  stay on card: a page request right after a card click does not undo it [property pane]
+PASS  leaving: the pane moving to another web part ends card editing [property pane]
+PASS  leaving: the web part's own edit button opens the settings [property pane]
+PASS  stay on card: a card opened from the settings list stays open too [property pane]
+PASS  two web parts: selecting a card in the second takes the pane over [property pane]
+PASS  two web parts: the first one drops its selection [property pane]
+PASS  two web parts: edits go to the card that is showing, and it stays open [property pane]
+PASS  stay on card: publishing ends card editing [property pane]
+PASS  stay on card: no errors and no unknown SharePoint APIs [property pane]
+PASS  stay on card: a pause while typing keeps the card settings open [content panel]
+PASS  stay on card: the card stays highlighted on the page [content panel]
+PASS  stay on card: typing continues on the same card [content panel]
+PASS  stay on card: pasting a link address keeps the card settings open [content panel]
+PASS  stay on card: choosing an icon keeps the card settings open [content panel]
+PASS  stay on card: repeated idle events never leave the card [content panel]
+PASS  stay on card: the Back button is what returns to the settings [content panel]
+PASS  stay on card: idle events on the settings page change nothing [content panel]
+PASS  stay on card: closing the pane ends card editing [content panel]
+PASS  stay on card: reopening the pane afterwards shows the settings [content panel]
+PASS  stay on card: SharePoint re-drawing the pane for this web part keeps the card [content panel]
+PASS  stay on card: …and it still stays after the next pause [content panel]
+PASS  stay on card: a page request right after a card click does not undo it [content panel]
+PASS  leaving: the pane moving to another web part ends card editing [content panel]
+PASS  leaving: the web part's own edit button opens the settings [content panel]
+PASS  stay on card: a card opened from the settings list stays open too [content panel]
+PASS  two web parts: selecting a card in the second takes the pane over [content panel]
+PASS  two web parts: the first one drops its selection [content panel]
+PASS  two web parts: edits go to the card that is showing, and it stays open [content panel]
+PASS  stay on card: publishing ends card editing [content panel]
+PASS  stay on card: no errors and no unknown SharePoint APIs [content panel]
 
 Third-party (PnP chunk) dev-mode notices:
   - Warning: %s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component
   - Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all s
 
-133/133 checks passed
+175/175 checks passed

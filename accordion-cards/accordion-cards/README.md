@@ -10,7 +10,7 @@ package, separate from Custom Width Header.
 | Node | 22.14+ (22.x) |
 | Package | `sharepoint/solution/accordion-cards.sppkg` (the original package name, so it overwrites the deployed one) |
 | Web part name | **Accordion Cards** (toolbox) |
-| Version | 1.0.4 |
+| Version | 1.0.5 |
 
 ## Web parts
 

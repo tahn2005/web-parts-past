@@ -19,13 +19,16 @@ const OTHER_NAMES = new RegExp(Buffer.from('bWFuYWdlci1odWJ8bWFuYWdlciBodWJ8bWFu
 const KNOWN_PNP_NOTICES = [/`key` is not a prop/, /Can't perform a React state update on an unmounted component/];
 const thirdParty = new Set();
 function check(name, ok, detail) {
+  return checkAll(name, ok, detail);
+}
+function checkAll(name, ok, detail) {
   results.push({ name, ok: !!ok });
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${!ok && detail !== undefined ? '  -> ' + JSON.stringify(detail) : ''}`);
 }
 
 const card = (id, extra = {}) => ({ ...DEFAULTS.cards[0], id, ...extra });
 
-async function open(browser, { props = DEFAULTS, mode = 2, viewport = { width: 1440, height: 900 }, media, two = false } = {}) {
+async function open(browser, { props = DEFAULTS, mode = 2, viewport = { width: 1440, height: 900 }, media, two = false, pane } = {}) {
   const page = await browser.newPage({ viewport });
   if (media) await page.emulateMedia(media);
   const requests = [];
@@ -39,7 +42,7 @@ async function open(browser, { props = DEFAULTS, mode = 2, viewport = { width: 1
   });
   page.on('pageerror', (e) => consoleErrors.push('pageerror: ' + e.message));
   page.on('dialog', (d) => (page.__dialogAnswer === false ? d.dismiss() : d.accept()));
-  await page.goto(BASE + 'index.html');
+  await page.goto(BASE + 'index.html' + (pane ? '?pane=' + pane : ''));
   await page.evaluate(
     async ({ props, mode, two }) => {
       window.wp1 = await mountWebPart({ mountId: 'wp1', properties: JSON.parse(JSON.stringify(props)), displayMode: mode, instanceId: 'l1' });
@@ -117,7 +120,7 @@ const paneButton = (page, text) => page.click(`#pane button:text-is("${text}")`)
     check('package: SharePoint pages only', /&quot;supportedHosts&quot;:\[&quot;SharePointWebPart&quot;\]/.test(xml));
     check('package: tenant-wide deployment', /SkipFeatureDeployment="true"/.test(xml));
     check('package: no custom script required', !/requiresCustomScript&quot;:true/i.test(xml));
-    check('package: version 1.0.1.0', /Version="1\.0\.1\.0"/.test(app));
+    check('package: version 1.0.2.0', /Version="1\.0\.2\.0"/.test(app));
     check('package: starts with one card', (xml.match(/default-link-1/g) || []).length >= 1);
   }
 
@@ -245,7 +248,9 @@ const paneButton = (page, text) => page.click(`#pane button:text-is("${text}")`)
     check('pane: Back returns to the settings', /Link Cards settings/.test(await paneHeader(page)));
     await page.click('#wp1 li:nth-child(2) [class*=card]');
     check('canvas: clicking a card selects it', (await paneHeader(page)) === 'Card 2 of 2');
+    await page.waitForTimeout(50); // the pane request for that click runs on the next tick
     await page.evaluate(() => wp1.context.propertyPane.close());
+    await page.waitForTimeout(700); // the web part waits for the pane to settle before it ends card editing
     check('pane: closing clears the selection', !(await page.$('#wp1 li[class*=selected]')));
 
     const saved = await props(page);
@@ -419,6 +424,113 @@ const paneButton = (page, text) => page.click(`#pane button:text-is("${text}")`)
     check('two Link Cards on a page: ids unique, edit controls clean', new Set(ids).size === ids.length);
     await axeRun(two.page, 'two Link Cards in edit mode');
     await two.page.close();
+  }
+
+  // ------------------------------------------------------------ card settings stay open until the author leaves them
+  for (const kind of ['classic', 'contentPanel']) {
+    const { page, consoleErrors } = await open(browser, { two: true, pane: kind });
+    const check = (name, ok, detail) => checkAll(`${name} [${kind === 'classic' ? 'property pane' : 'content panel'}]`, ok, detail);
+    const SETTLE = 700; // longer than the web part's own 500ms wait
+    // What SharePoint does 5 seconds after the author's last change, while the pane is still open on this
+    // web part: it raises "configuration complete", and it redraws the pane on the next change.
+    const idleComplete = async (name = 'wp1', times = 1) => {
+      for (let i = 0; i < times; i++) await page.evaluate((n) => window[n].onPropertyPaneConfigurationComplete(), name);
+      await page.waitForTimeout(SETTLE);
+      await page.evaluate((n) => window[n].context.propertyPane.refresh(), name);
+    };
+    const selected = (id) => page.$(`#${id} li[class*=selected]`);
+
+    await page.click('#wp1 button[aria-label="Edit card"]');
+    await page.waitForSelector('#pane .pane-header');
+    await setText(page, 'cards[0].text', 'Typed so');
+    await idleComplete();
+    check('stay on card: a pause while typing keeps the card settings open', (await paneHeader(page)) === 'Card 1 of 1', await paneHeader(page));
+    check('stay on card: the card stays highlighted on the page', !!(await selected('wp1')));
+    await setText(page, 'cards[0].text', 'Typed so far');
+    await page.evaluate(() => wp1.context.propertyPane.refresh());
+    check('stay on card: typing continues on the same card', (await paneHeader(page)) === 'Card 1 of 1' && (await props(page)).cards[0].text === 'Typed so far');
+
+    await setText(page, 'cards[0].url', 'https://contoso.sharepoint.com/sites/hr/pasted.aspx');
+    await idleComplete();
+    check('stay on card: pasting a link address keeps the card settings open', (await paneHeader(page)) === 'Card 1 of 1' && (await props(page)).cards[0].url === 'https://contoso.sharepoint.com/sites/hr/pasted.aspx');
+
+    await page.click('#pane .custom button[aria-label="Star"]');
+    await idleComplete();
+    check('stay on card: choosing an icon keeps the card settings open', (await paneHeader(page)) === 'Card 1 of 1' && (await props(page)).cards[0].iconName === 'Star');
+
+    await idleComplete('wp1', 5);
+    await page.waitForTimeout(SETTLE);
+    await page.evaluate(() => wp1.context.propertyPane.refresh());
+    check('stay on card: repeated idle events never leave the card', (await paneHeader(page)) === 'Card 1 of 1' && !!(await selected('wp1')));
+
+    await paneButton(page, 'Back to Link Cards settings');
+    check('stay on card: the Back button is what returns to the settings', /Link Cards settings/.test(await paneHeader(page)) && !(await selected('wp1')));
+    await idleComplete();
+    check('stay on card: idle events on the settings page change nothing', /Link Cards settings/.test(await paneHeader(page)));
+
+    await page.click('#wp1 button[aria-label="Edit card"]');
+    await page.waitForTimeout(50);
+    await page.evaluate(() => wp1.context.propertyPane.close());
+    await page.waitForTimeout(SETTLE);
+    check('stay on card: closing the pane ends card editing', !(await selected('wp1')));
+    await page.evaluate(() => wp1.context.propertyPane.open());
+    await page.waitForSelector('#pane .pane-header');
+    check('stay on card: reopening the pane afterwards shows the settings', /Link Cards settings/.test(await paneHeader(page)));
+
+    // The page itself can ask for the pane around a card click, or when the author clicks back into the web part.
+    await page.click('#wp1 button[aria-label="Edit card"]');
+    await page.waitForTimeout(SETTLE);
+    await page.evaluate(() => hostOpenPane(wp1));
+    await page.waitForTimeout(50);
+    check('stay on card: SharePoint re-drawing the pane for this web part keeps the card', (await paneHeader(page)) === 'Card 1 of 1' && !!(await selected('wp1')), await paneHeader(page));
+    await setText(page, 'cards[0].text', 'After a re-draw');
+    await idleComplete();
+    check('stay on card: …and it still stays after the next pause', (await paneHeader(page)) === 'Card 1 of 1' && !!(await selected('wp1')), await paneHeader(page));
+    await page.evaluate(() => { document.querySelector('#wp1 button[aria-label="Edit card"]').click(); setTimeout(() => hostOpenPane(wp1), 0); });
+    await page.waitForTimeout(50);
+    await idleComplete();
+    check('stay on card: a page request right after a card click does not undo it', (await paneHeader(page)) === 'Card 1 of 1' && !!(await selected('wp1')), await paneHeader(page));
+
+    // The pane leaves for something else on the page, then the author comes back with the web part's edit button.
+    await page.evaluate(() => hostOpenPane(wp2));
+    await page.waitForTimeout(SETTLE);
+    check('leaving: the pane moving to another web part ends card editing', !(await selected('wp1')) && (await page.evaluate(() => __pane.wp === wp2)));
+    await page.click('#wp1 button[aria-label="Edit card"]');
+    await page.waitForTimeout(SETTLE);
+    await page.evaluate(() => wp1.context.propertyPane.close());
+    await page.waitForTimeout(SETTLE);
+    await page.evaluate(() => hostOpenPane(wp1));
+    await page.waitForTimeout(SETTLE);
+    check('leaving: the web part\'s own edit button opens the settings', /Link Cards settings/.test(await paneHeader(page)) && !(await selected('wp1')), await paneHeader(page));
+    await page.click('#pane button:text-matches("^1\\. ")');
+    await page.waitForTimeout(50);
+    await setText(page, 'cards[0].text', 'From the list');
+    await idleComplete();
+    check('stay on card: a card opened from the settings list stays open too', (await paneHeader(page)) === 'Card 1 of 1' && !!(await selected('wp1')), await paneHeader(page));
+    await page.evaluate(() => wp1.context.propertyPane.close());
+    await page.waitForTimeout(SETTLE);
+
+    // Two of the same web part on one page: the pane follows the card that was selected last.
+    await page.click('#wp1 button[aria-label="Edit card"]');
+    await setText(page, 'cards[0].text', 'First web part');
+    await page.click('#wp2 button[aria-label="Edit card"]');
+    await page.waitForTimeout(SETTLE);
+    check('two web parts: selecting a card in the second takes the pane over', (await page.evaluate(() => __pane.wp === wp2)) && (await paneHeader(page)) === 'Card 1 of 1' && !!(await selected('wp2')));
+    check('two web parts: the first one drops its selection', !(await selected('wp1')));
+    await setText(page, 'cards[0].text', 'Second web part');
+    await idleComplete('wp2');
+    const both = await page.evaluate(() => [wp1.properties.cards[0].text, wp2.properties.cards[0].text]);
+    check('two web parts: edits go to the card that is showing, and it stays open', both[0] === 'First web part' && both[1] === 'Second web part' && (await paneHeader(page)) === 'Card 1 of 1', both);
+
+    // Leaving edit mode or removing the web part while a check is pending must be harmless.
+    await page.evaluate(() => { wp2.onPropertyPaneConfigurationComplete(); setDisplayMode(wp2, 1); });
+    await page.waitForTimeout(SETTLE);
+    check('stay on card: publishing ends card editing', !(await selected('wp2')));
+    await page.evaluate(() => { wp1.onPropertyPaneConfigurationComplete(); wp1.onDispose(); });
+    await page.waitForTimeout(SETTLE);
+    const errs = await page.evaluate(() => __errors.concat(__missing));
+    check('stay on card: no errors and no unknown SharePoint APIs', errs.length === 0 && consoleErrors.length === 0, errs.concat(consoleErrors));
+    await page.close();
   }
 
   await browser.close();

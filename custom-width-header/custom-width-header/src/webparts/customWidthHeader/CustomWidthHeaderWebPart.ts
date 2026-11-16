@@ -343,7 +343,6 @@ export default class CustomWidthHeaderWebPart extends BaseClientSideWebPart<ICus
       { groupName: strings.BackgroundGroup, groupFields: backgroundFields },
       {
         groupName: strings.LayoutGroup,
-        isCollapsed: true,
         groupFields: [
           PropertyPaneDropdown('layout', {
             label: strings.LayoutField,
@@ -371,18 +370,13 @@ export default class CustomWidthHeaderWebPart extends BaseClientSideWebPart<ICus
           PropertyPaneLabel(PANE_NOTE, { text: strings.HeadingLevelHelp })
         ]
       },
-      {
-        groupName: strings.FontGroup,
-        isCollapsed: true,
-        groupFields: [PropertyPaneToggle('useManagerHubFonts', { label: strings.UseFontsField })]
-      },
-      {
-        groupName: strings.AccessibilityGroup,
-        isCollapsed: accessibilityFields.length === 1 && theme.adjustments.length === 0 && p.backgroundType === 'color',
-        groupFields: accessibilityFields
-      }
+      { groupName: strings.FontGroup, groupFields: [PropertyPaneToggle('useManagerHubFonts', { label: strings.UseFontsField })] },
+      { groupName: strings.AccessibilityGroup, groupFields: accessibilityFields }
     ];
 
+    // Every group is always open (no accordion, nothing collapsed): SharePoint
+    // never lets authors expand a collapsed group on a page that isn't an
+    // accordion, so collapsed groups would hide their settings for good.
     return { pages: [{ header: { description: strings.PaneDescription }, groups }] };
   }
 

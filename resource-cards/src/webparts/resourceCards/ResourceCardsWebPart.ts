@@ -32,12 +32,16 @@ import { checkUrl } from './common/url';
 import { uploadImageToSiteAssets } from './common/upload';
 import { registerCardFont } from './common/fonts';
 
-/** How long after a "configuration complete" event the pane is checked (see onPropertyPaneConfigurationComplete). */
-const PANE_SETTLE_MS = 500;
-/** How long after this web part asks for the pane a pane "start" still counts as its own request. */
-const OWN_PANE_REQUEST_MS = 1500;
-/** A "start" this soon after a "complete" means the pane never left this web part. */
-const PANE_RETARGET_MS = 100;
+/** How long after a "configuration complete" event the pane is checked for being closed (see onPropertyPaneConfigurationComplete). */
+const PANE_SETTLE_MS = 600;
+/**
+ * How long SharePoint may take to answer this web part's own open() with a
+ * "configuration start". The first open also downloads the pane's code, which
+ * can take a few seconds on a slow connection.
+ */
+const OWN_PANE_REQUEST_MS = 10000;
+/** A "start" this soon after a "complete" is SharePoint re-drawing a pane that never left this web part. */
+const PANE_RETARGET_MS = 250;
 /** Raised on the document when a web part puts one of its cards in the pane, so any other one stops editing its card. */
 const CARD_PANE_CLAIMED = 'card-settings-pane-claimed';
 
@@ -47,10 +51,13 @@ export default class ResourceCardsWebPart extends BaseClientSideWebPart<IResourc
   private _selectedCardId: string | undefined;
   private _closeCheckTimer: number | undefined;
   private _openTimer: number | undefined;
-  private _verifyTimer: number | undefined;
+  /** This web part asked for the pane itself (open()) and SharePoint hasn't answered with a "start" yet. */
+  private _ownRequestPending: boolean = false;
   /** When this web part last asked for the pane itself, and when the pane last reported "complete". */
   private _paneRequestedAt: number | undefined;
   private _paneCompletedAt: number | undefined;
+  /** The pane's last lifecycle event for this web part. */
+  private _lastPaneEvent: 'start' | 'complete' | undefined;
 
   protected onInit(): Promise<void> {
     this._applyDefaults();
@@ -84,7 +91,7 @@ export default class ResourceCardsWebPart extends BaseClientSideWebPart<IResourc
   protected onDisplayModeChanged(oldDisplayMode: DisplayMode): void {
     window.clearTimeout(this._closeCheckTimer);
     window.clearTimeout(this._openTimer);
-    window.clearTimeout(this._verifyTimer);
+    this._ownRequestPending = false;
     this._selectedCardId = undefined;
     super.onDisplayModeChanged(oldDisplayMode);
     this.render();
@@ -93,7 +100,6 @@ export default class ResourceCardsWebPart extends BaseClientSideWebPart<IResourc
   protected onDispose(): void {
     window.clearTimeout(this._closeCheckTimer);
     window.clearTimeout(this._openTimer);
-    window.clearTimeout(this._verifyTimer);
     document.removeEventListener(CARD_PANE_CLAIMED, this._onPaneClaimed);
     this._root?.unmount();
     this._root = undefined;
@@ -141,6 +147,7 @@ export default class ResourceCardsWebPart extends BaseClientSideWebPart<IResourc
 
   private _showAllSettings = (): void => {
     this._selectedCardId = undefined;
+    this._ownRequestPending = false;
     this._afterCardsChanged(false);
   };
 
@@ -180,37 +187,39 @@ export default class ResourceCardsWebPart extends BaseClientSideWebPart<IResourc
   // ---- Property pane ---------------------------------------------------------
 
   /**
-   * Puts the pane on the selected card and keeps it there. open() (not just
-   * refresh()) also takes the pane over when it shows something else, and
-   * marks the pane as opened by a web part, which is how the check in
-   * onPropertyPaneConfigurationComplete knows it still belongs here. It runs
-   * on the next tick so it is the last pane request for the click that
-   * selected the card, after anything SharePoint's canvas does for it.
+   * Puts the pane on the selected card. open() (not just refresh()) also takes
+   * the pane over when it shows something else. It runs on the next tick so it
+   * is the last pane request for the click that selected the card, after
+   * anything SharePoint's canvas does for the same click.
    */
   private _claimPane(): void {
     document.dispatchEvent(new CustomEvent<string>(CARD_PANE_CLAIMED, { detail: this.instanceId }));
-    this._paneRequestedAt = Date.now();
+    window.clearTimeout(this._closeCheckTimer);
     window.clearTimeout(this._openTimer);
-    window.clearTimeout(this._verifyTimer);
+    this._ownRequestPending = true;
+    this._paneRequestedAt = Date.now();
     this._openTimer = window.setTimeout(() => {
       // The author may have left the card, or edit mode, before this runs.
       if (this._selectedCardId !== undefined && this.displayMode === DisplayMode.Edit) {
         this.context.propertyPane.open();
+      } else {
+        this._ownRequestPending = false;
       }
     }, 0);
   }
 
+  /** Another card web part on the page put one of its cards in the pane. */
   private _onPaneClaimed = (event: Event): void => {
     if ((event as CustomEvent<string>).detail !== this.instanceId) {
       this._endCardEditing(false);
     }
   };
 
-  /** Back to "no card selected": the pane closed or moved on, or the author asked for the settings. */
+  /** Back to "no card selected": the pane closed, the pane came back from elsewhere, or another card web part took it. */
   private _endCardEditing(refreshPane: boolean): void {
     window.clearTimeout(this._closeCheckTimer);
     window.clearTimeout(this._openTimer);
-    window.clearTimeout(this._verifyTimer);
+    this._ownRequestPending = false;
     if (this._selectedCardId === undefined) {
       return;
     }
@@ -222,54 +231,60 @@ export default class ResourceCardsWebPart extends BaseClientSideWebPart<IResourc
   }
 
   /**
-   * The pane started showing this web part. While a card is being edited that
-   * is either this web part's own request, or SharePoint re-drawing a pane
-   * that was already here; the card stays in both cases. Otherwise the author
-   * opened the pane afresh, for example with the web part's edit button, and
-   * gets the general settings.
+   * The pane started showing this web part. A card's settings stay up when
+   * this is the answer to this web part's own open(), or the pane never left
+   * this web part: either no "complete" came since the last "start" (the
+   * classic pane can send two "start"s for one opening when SharePoint's
+   * canvas selects the web part during the opening animation), or the
+   * "complete" came straight before it (SharePoint re-drawing the pane, for
+   * example when the author clicks inside the web part). Otherwise the pane
+   * has come back from somewhere else, such as another web part or the
+   * section settings, or the author used the web part's own edit button:
+   * they get the general settings, as with SharePoint's own Quick Links.
    */
   protected onPropertyPaneConfigurationStart(): void {
+    window.clearTimeout(this._closeCheckTimer);
+    const now = Date.now();
+    const ownRequest =
+      this._ownRequestPending && this._paneRequestedAt !== undefined && now - this._paneRequestedAt < OWN_PANE_REQUEST_MS;
+    this._ownRequestPending = false;
+    const neverLeft =
+      this._lastPaneEvent === 'start' ||
+      (this._paneCompletedAt !== undefined && now - this._paneCompletedAt < PANE_RETARGET_MS);
+    this._lastPaneEvent = 'start';
+    if (this._selectedCardId !== undefined && !ownRequest && !neverLeft) {
+      this._endCardEditing(true);
+    }
+  }
+
+  /**
+   * SharePoint raises this when the pane closes or moves on, but also 5
+   * seconds after the author's last change, when focus leaves the pane, and
+   * just before it re-draws a pane that stays on this web part. None of those
+   * may take the author off the card they are editing, so this only ends card
+   * editing once the pane has really closed. (Moving to another web part or
+   * to the section settings is handled when the pane comes back: see
+   * onPropertyPaneConfigurationStart.) The pane is checked twice, a moment
+   * apart, so a pane that is only re-drawing is never mistaken for a closed one.
+   */
+  protected onPropertyPaneConfigurationComplete(): void {
+    this._paneCompletedAt = Date.now();
+    this._lastPaneEvent = 'complete';
     window.clearTimeout(this._closeCheckTimer);
     if (this._selectedCardId === undefined) {
       return;
     }
-    const now = Date.now();
-    const ownRequest = this._paneRequestedAt !== undefined && now - this._paneRequestedAt < OWN_PANE_REQUEST_MS;
-    const alreadyHere = this._paneCompletedAt !== undefined && now - this._paneCompletedAt < PANE_RETARGET_MS;
-    if (!ownRequest && !alreadyHere) {
-      this._endCardEditing(true);
-      return;
-    }
-    // SharePoint's canvas can send its own request for the pane around the same
-    // click. If it had the last word the pane is no longer marked as opened by
-    // a web part, so ask for it once more.
-    window.clearTimeout(this._verifyTimer);
-    this._verifyTimer = window.setTimeout(() => {
-      if (this._selectedCardId !== undefined && !this.context.propertyPane.isRenderedByWebPart()) {
-        this._claimPane();
-      }
-    }, 0);
-  }
-
-  /**
-   * SharePoint raises this when the pane closes or moves to another web part,
-   * but also 5 seconds after the author's last change and whenever focus
-   * leaves the pane, while it is still open on this web part. Only the first
-   * two end card editing: a card's settings stay up until the author presses
-   * "Done". The check waits a moment so the pane has settled
-   * before it is asked; a pane that SharePoint moved elsewhere is no longer
-   * marked as opened by a web part.
-   */
-  protected onPropertyPaneConfigurationComplete(): void {
-    this._paneCompletedAt = Date.now();
-    window.clearTimeout(this._closeCheckTimer);
+    const paneClosed = (): boolean => this.displayMode !== DisplayMode.Edit || !this.context.propertyPane.isPropertyPaneOpen();
     this._closeCheckTimer = window.setTimeout(() => {
-      this._closeCheckTimer = undefined;
-      const pane = this.context.propertyPane;
-      if (this.displayMode === DisplayMode.Edit && pane.isPropertyPaneOpen() && pane.isRenderedByWebPart()) {
+      if (!paneClosed()) {
         return;
       }
-      this._endCardEditing(false);
+      this._closeCheckTimer = window.setTimeout(() => {
+        this._closeCheckTimer = undefined;
+        if (paneClosed()) {
+          this._endCardEditing(false);
+        }
+      }, PANE_SETTLE_MS);
     }, PANE_SETTLE_MS);
   }
 

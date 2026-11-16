@@ -3,7 +3,7 @@
   "solution": {
     "name": "Custom Width Header",
     "id": "a9db1d40-94f9-4cb4-b3e5-c6f8271e3100",
-    "version": "1.0.2.0",
+    "version": "1.0.3.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -30,7 +30,7 @@
         "title": "Custom Width Header",
         "description": "Activates the Custom Width Header web part.",
         "id": "042ca162-b9ce-4bcb-91a9-497ad9170f17",
-        "version": "1.0.2.0"
+        "version": "1.0.3.0"
       }
     ]
   },

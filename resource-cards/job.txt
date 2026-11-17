@@ -1,0 +1,62 @@
+Company Information
+For more than 20 years, AEG has played a pivotal role in transforming sports and live entertainment. Annually, we host more than 160 million guests, promote more than 10,000 shows and present more than 22,000 events around the world. We are committed to innovation, artistry, and community, and leverage the power of our 300+ venues, leading sports franchises, marquee music brands, integrated entertainment districts, premier ticketing platform and global sponsorship activations, to create memorable moments that give the world reason to cheer.
+
+Our business is interwoven with the human mind and heart, and we strive to build a diverse and inclusive company that reflects the artists, athletes, and fans that we host; reach beyond traditional boundaries to support the communities in which we operate; and minimize our impact on the environment by adopting sustainable practices throughout our business operations.
+
+If you want to be challenged to up your game and make a difference, then join us in giving the world reason to cheer!
+
+ 
+
+Job Summary
+
+The Dynamics 365 Developer is responsible for the architecture, design, development, and administration of AEG's Power Apps and Dynamics platform. This role is a critical resource focused on building, maintaining and supporting custom application versions across multiple business units. The role will be an integral member of the AEG Global Technology team and liaise directly with stakeholders from various business areas to understand and support their application needs. The role will also work closely with the Infrastructure and Operations team to ensure that all standards and security requirements are met and delivered.
+
+ 
+
+Essential Functions
+
+Administration, development and support of Microsoft Platforms Apps across various AEG entities.
+Provide support and administration of third party solutions.
+Maintenance of custom configurations within the Power Platform environment and Dynamics Platform.
+Development of integrations of data and functionality using the Power Platform (Power Automate and Power Apps)
+Documenting and defining user requirements with product stakeholders, including flow charts, layouts and diagrams
+Establishes best practice for support of and knowledge sharing of the functionality of the Dynamics 365 and Power Platform environment.
+Support Azure Web App Servers
+Work with the AEG Data Engineering and BI teams to ensure data integrity across the applications and datasets when using Dataverse.
+Required Qualifications
+
+BA/BS Degree (4-year) Computer Science or related technical area
+2-4 years Experience with Dynamics 365, Office 365 and Microsoft Power Platform preferred
+Experience working with Azure Functions and Logic Apps and Azure Web Services
+Experience of working with various systems integrations, including APIs, stream data sources
+Experience working with application managements lifecycle tools/source control, Power Apps
+Experience of Application Development, using C#, .Net and SQL
+Experience with Azure SQL Database
+Experience with Scripting languages including HTML5, CSS, Node.js, and Javascript
+Experience with Dataverse is preferred
+Experience with Typescript preferred
+Experience with Power Apps Pipeline preferred
+Strong verbal and written communication skills and ability to interface with all levels of the organization
+Possesses a balance of an analytical personality coupled with strong collaborative, communication, written and executive presentation skills
+Demonstrated ability to lead projects
+Organized, diligently follows up on open tasks
+Competency in Analytical Problem Solving, Product & Technology Expertise, Project Management, Strategic Insights
+Strong understanding of Power Platform modules with functional knowledge of the entire product suite
+Microsoft Certified Systems Administrator (MCSA) Dynamics 365 related certifications
+Power Platforms Fundamentals PL-900
+Microsoft Dynamic 365 Fundamentals (CRM) MB-910
+Pay Scale: $125,000.00 - $145,000.00
+
+Bonus: This position is eligible for a bonus under the current bonus plan requirements.
+
+Benefits: Full-time: We offer a comprehensive benefits package that includes: medical, dental and vision insurance, paid holidays, vacation and sick time, company paid basic life insurance, voluntary life insurance, parental leave, 401k Plan (with a current employer match of 3%), flexible spending and health savings account options, and wellness offerings.
+
+ 
+
+ 
+
+AEG reserves the right to change or modify the employee’s job description whether orally or in writing, at any time during the employment relationship.  AEG may require an employee to perform duties outside their normal description.
+
+AEG's policy is to hire the most qualified applicants, and we comply with all applicable federal, state and local employment laws in making hiring and employee decisions.  We are an equal opportunity employer and do not discriminate against applicants or employees on the basis of race, color, marital status, disability, religion, age, sex, sexual orientation, national origin, genetic information, veteran status, or any other legally protected status recognized by applicable federal, state or local law.
+
+Employer does not offer work visa sponsorship for this position.

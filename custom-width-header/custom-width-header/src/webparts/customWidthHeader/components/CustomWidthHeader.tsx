@@ -80,6 +80,7 @@ export function CustomWidthHeader(props: ICustomWidthHeaderProps): JSX.Element {
             <a
               className={styles.backLink}
               href={backHref}
+              aria-label={`backlink from ${title} page to ${backText} page`}
               data-interception="on"
               onClick={isEditMode ? (event) => event.preventDefault() : undefined}
             >
